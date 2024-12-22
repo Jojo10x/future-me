@@ -1,24 +1,21 @@
-import React from "react";
 import { CheckCircle2, Edit2, Trash2 } from "lucide-react";
+import { Goal} from "@/types/types";
+import { SubTaskList } from "./SubTaskList";
 
-interface Goal {
-  id: number;
-  title: string;
-  description: string;
-  year: number;
-  is_completed: boolean;
-}
-
-const GoalItem = ({
-  goal,
-  onDelete,
-  onComplete,
-  onEdit,
-}: {
+interface GoalItemProps {
   goal: Goal;
   onDelete: () => void;
   onComplete: () => void;
   onEdit: () => void;
+  onSubtaskComplete: (subtaskId: number) => void;
+}
+
+const GoalItem: React.FC<GoalItemProps> = ({
+  goal,
+  onDelete,
+  onComplete,
+  onEdit,
+  onSubtaskComplete,
 }) => {
   return (
     <div
@@ -30,7 +27,6 @@ const GoalItem = ({
       } 
       hover:shadow-md`}
     >
-      {/* Main Content */}
       <div className="space-y-4">
         <div className="flex items-start justify-between">
           <h3
@@ -44,9 +40,15 @@ const GoalItem = ({
           </span>
         </div>
 
-        <p className="text-slate-600">{goal.description}</p>
+        {goal.description ? (
+  <p className="text-slate-600">{goal.description}</p>
+) : (
+  <SubTaskList
+    subtasks={goal.subtasks}
+    onComplete={(subtaskId) => onSubtaskComplete(subtaskId)}
+  />
+)}
 
-        {/* Action Buttons */}
         <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
           <button
             onClick={onComplete}
