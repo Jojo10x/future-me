@@ -147,7 +147,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({
 
   return (
     <Modal title={isEditing ? "Edit Goal" : "Add New Goal"} onClose={onClose}>
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <GoalTitleInput goal={goal} handleChange={handleChange} />
         <GoalTypeSelector
           isDescriptionMode={isDescriptionMode}

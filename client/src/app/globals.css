@@ -1,24 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+  
 *{
     font-family:georgia, serif;
+    
 }
 h1 {
     font-family:SpaceGrotesk-Light;
-color:#fff;
-line-height: 1.2;
-    font-weight: 500;
-    font-size: 64px;
-    margin-bottom: 40px;
+
 }
 h2 {
     font-family:SpaceGrotesk-Medium;
-    max-width: 520px;
-    text-transform: uppercase;
-color:#fff;
-font-size: 16px;
+
 }
 
 @keyframes gradient-animation {
@@ -37,3 +31,42 @@ font-size: 16px;
     animation: gradient-animation 5s ease infinite;
   }
   
+  .classit {
+    background: linear-gradient(
+      to right,
+      #333333, 
+      #1a1a1a, 
+      #121212, 
+      #000000,  
+      #1f1f1f,  
+      #292929 
+    );
+    background-size: 400% 400%;
+    animation: body 10s infinite ease-in-out;
+  }
+  
+  @keyframes body {
+    0% {
+      background-position: 0 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0 50%;
+    }
+  }
+
+
+
+   @keyframes spin-slow {
+     from {
+         transform: rotate(0deg);
+       }
+       to {
+         transform: rotate(360deg);
+       }
+     }
+     .animate-spin-slow {
+       animation: spin-slow 3s linear infinite;
+     }

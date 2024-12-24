@@ -2,7 +2,7 @@ export const FormAction: React.FC<{
     isEditing: boolean;
     onClose: () => void;
   }> = ({ isEditing, onClose }) => (
-    <div className="flex justify-end space-x-4">
+    <div className="flex justify-end space-x-4  ">
       <button
         type="button"
         onClick={onClose}
