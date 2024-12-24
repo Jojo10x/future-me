@@ -1,13 +1,6 @@
 import React from "react";
 import { Sparkles, Trophy } from "lucide-react";
-
-interface Goal {
-  id: number;
-  title: string;
-  description: string;
-  year: number;
-  is_completed: boolean;
-}
+import { Goal } from "@/types/types";
 
 interface GoalProgressTrackerProps {
   goals: Goal[];
