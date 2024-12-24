@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+*{
+    font-family:georgia, serif;
+}
+h1 {
+    font-family:SpaceGrotesk-Light;
+color:#fff;
+line-height: 1.2;
+    font-weight: 500;
+    font-size: 64px;
+    margin-bottom: 40px;
+}
+h2 {
+    font-family:SpaceGrotesk-Medium;
+    max-width: 520px;
+    text-transform: uppercase;
+color:#fff;
+font-size: 16px;
+}
+
+@keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .animate-gradient {
+    animation: gradient-animation 5s ease infinite;
+  }
+  

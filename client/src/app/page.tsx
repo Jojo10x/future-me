@@ -4,6 +4,7 @@ import { YearFilter } from '@/components/YearFilter';
 import {GoalForm} from '@/components/GoalForm';
 import GoalList from '@/components/GoalList';
 import { useGoals } from '@/hooks/useGoals';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   const {
@@ -57,6 +58,7 @@ export default function Home() {
           />
         )}
       </div>
+      <Footer/>
     </div>
   );
 }
