@@ -10,18 +10,22 @@ type HeaderProps = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ goals, onAddGoal }) => (
-  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-    {/* <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-      Future Me
-    </h1> */}
-    <Image
-          width={100}
-          height={100}
-          src={logo}
-          alt="PixelTochka Logo"
-          className="ml-2"
-        />
+  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div className="flex flex-row justify-between items-center w-full sm:w-auto">
+      <Image
+        width={100}
+        height={100}
+        src={logo}
+        alt="PixelTochka Logo"
+        className="ml-2"
+      />
+      <div className="sm:hidden">
+        <AddGoalButton onClick={onAddGoal} />
+      </div>
+    </div>
     <ProgressTracker goals={goals} />
-    <AddGoalButton onClick={onAddGoal} />
+    <div className="hidden sm:block">
+      <AddGoalButton onClick={onAddGoal} />
+    </div>
   </div>
 );
