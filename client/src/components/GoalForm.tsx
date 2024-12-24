@@ -1,22 +1,10 @@
-import { Dispatch, SetStateAction } from "react";
-import { Goal, NewGoal } from "@/types/types";
-
-type BaseGoalFormProps = {
-  onSubmit: (e: React.FormEvent) => Promise<void>;
-  onClose: () => void;
-};
-
-type EditingGoalFormProps = BaseGoalFormProps & {
-  isEditing: true;
-  goal: Goal;
-  setGoal: Dispatch<SetStateAction<Goal | null>>;
-};
-
-type CreatingGoalFormProps = BaseGoalFormProps & {
-  isEditing: false;
-  goal: Partial<NewGoal>;
-  setGoal: Dispatch<SetStateAction<Partial<NewGoal>>>;
-};
+import {
+  EditingGoalFormProps,
+  CreatingGoalFormProps,
+  Goal,
+  NewGoal,
+} from "@/types/types";
+import { Modal } from "./Modal";
 
 type GoalFormProps = EditingGoalFormProps | CreatingGoalFormProps;
 
@@ -33,10 +21,18 @@ export const GoalForm: React.FC<GoalFormProps> = ({
   ) => {
     if (isEditing) {
       setGoal((prev: Goal | null) =>
-        prev ? { ...prev, [field]: value } : null
+        prev ? { 
+          ...prev, 
+          [field]: value,
+          is_completed: prev.is_completed 
+        } : null
       );
     } else {
-      setGoal((prev: Partial<NewGoal>) => ({ ...prev, [field]: value }));
+      setGoal((prev: Partial<NewGoal>) => ({ 
+        ...prev, 
+        [field]: value,
+        is_completed: false 
+      }));
     }
   };
 
@@ -46,6 +42,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({
         prev
           ? {
               ...prev,
+              is_completed: prev.is_completed, 
               subtasks: [
                 ...prev.subtasks,
                 {
@@ -61,6 +58,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({
     } else {
       setGoal((prev: Partial<NewGoal>) => ({
         ...prev,
+        is_completed: false, 
         subtasks: [
           ...(prev.subtasks || []),
           { title: "", is_completed: false },
@@ -74,14 +72,30 @@ export const GoalForm: React.FC<GoalFormProps> = ({
       setGoal((prev: Goal | null) => {
         if (!prev) return null;
         const newSubtasks = [...prev.subtasks];
-        newSubtasks[index] = { ...newSubtasks[index], title: value };
-        return { ...prev, subtasks: newSubtasks };
+        newSubtasks[index] = { 
+          ...newSubtasks[index], 
+          title: value,
+          is_completed: newSubtasks[index].is_completed
+        };
+        return { 
+          ...prev, 
+          subtasks: newSubtasks,
+          is_completed: prev.is_completed 
+        };
       });
     } else {
       setGoal((prev: Partial<NewGoal>) => {
         const subtasks = [...(prev.subtasks || [])];
-        subtasks[index] = { ...subtasks[index], title: value };
-        return { ...prev, subtasks };
+        subtasks[index] = { 
+          ...subtasks[index], 
+          title: value,
+          is_completed: false
+        };
+        return { 
+          ...prev, 
+          subtasks,
+          is_completed: false
+        };
       });
     }
   };
@@ -91,144 +105,148 @@ export const GoalForm: React.FC<GoalFormProps> = ({
       setGoal((prev: Goal | null) => {
         if (!prev) return null;
         const newSubtasks = prev.subtasks.filter((_, i) => i !== index);
-        return { ...prev, subtasks: newSubtasks };
+        return { 
+          ...prev, 
+          subtasks: newSubtasks,
+          is_completed: prev.is_completed 
+        };
       });
     } else {
       setGoal((prev: Partial<NewGoal>) => {
         const subtasks = (prev.subtasks || []).filter((_, i) => i !== index);
-        return { ...prev, subtasks };
+        return { 
+          ...prev, 
+          subtasks,
+          is_completed: false
+        };
       });
     }
   };
 
-  const isDescriptionMode = goal.description !== undefined;
-  const subtasks = isEditing ? goal.subtasks : (goal.subtasks || []);
+  const isDescriptionMode = goal.description !== undefined && (!goal.subtasks || goal.subtasks.length === 0);
+  const subtasks = goal.subtasks || [];
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isEditing) {
+      onSubmit(e);
+    } else {
+      onSubmit(e);
+    }
+  };
 
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg p-6 md:p-8 shadow-xl">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            {isEditing ? "Edit Goal" : "Add New Goal"}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            ×
-          </button>
+    <Modal title={isEditing ? "Edit Goal" : "Add New Goal"} onClose={onClose}>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Goal Title
+          </label>
+          <input
+            type="text"
+            value={goal.title || ""}
+            onChange={(e) => handleChange("title", e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            required
+          />
         </div>
-        <form onSubmit={onSubmit} className="space-y-6">
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Type
+          </label>
+          <select
+            value={isDescriptionMode ? "description" : "subtasks"}
+            onChange={(e) => {
+              const newType = e.target.value;
+              if (newType === "description") {
+                handleChange("description", "");
+                handleChange("subtasks", []);
+              } else {
+                handleChange("description", undefined);
+                handleChange("subtasks", []);
+              }
+            }}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="description">Description</option>
+            <option value="subtasks">Subtasks</option>
+          </select>
+        </div>
+
+        {isDescriptionMode ? (
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Goal Title
+              Description
             </label>
-            <input
-              type="text"
-              value={goal.title || ""}
-              onChange={(e) => handleChange("title", e.target.value)}
+            <textarea
+              value={goal.description || ""}
+              onChange={(e) => handleChange("description", e.target.value)}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              required
             />
           </div>
-
-          <div>
+        ) : (
+          <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Type
+              Subtasks
             </label>
-            <select
-              value={isDescriptionMode ? "description" : "subtasks"}
-              onChange={(e) => {
-                const newType = e.target.value;
-                if (newType === "description") {
-                  handleChange("description", "");
-                  handleChange("subtasks", []);
-                } else {
-                  handleChange("description", undefined);
-                  handleChange("subtasks", []);
-                }
-              }}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            >
-              <option value="description">Description</option>
-              <option value="subtasks">Subtasks</option>
-            </select>
-          </div>
-
-          {isDescriptionMode ? (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Description
-              </label>
-              <textarea
-                value={goal.description || ""}
-                onChange={(e) => handleChange("description", e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Subtasks
-              </label>
-              {subtasks.map((subtask, index) => (
-                <div key={index} className="flex gap-2">
-                  <input
-                    type="text"
-                    value={subtask.title}
-                    onChange={(e) => handleSubtaskChange(index, e.target.value)}
-                    className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Enter subtask"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleSubtaskRemove(index)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={handleSubtaskAdd}
-                className="text-blue-500 hover:text-blue-700"
-              >
-                + Add Subtask
-              </button>
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Year
-            </label>
-            <input
-              type="number"
-              value={goal.year || ""}
-              onChange={(e) => handleChange("year", parseInt(e.target.value))}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          <div className="flex justify-end space-x-4">
+            {subtasks.map((subtask, index) => (
+              <div key={index} className="flex gap-2">
+                <input
+                  type="text"
+                  value={subtask.title}
+                  onChange={(e) => handleSubtaskChange(index, e.target.value)}
+                  className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Enter subtask"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleSubtaskRemove(index)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
             <button
               type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-gray-700 hover:text-gray-900"
+              onClick={handleSubtaskAdd}
+              className="text-blue-500 hover:text-blue-700"
             >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
-              {isEditing ? "Update" : "Create"}
+              + Add Subtask
             </button>
           </div>
-        </form>
-      </div>
-    </div>
+        )}
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Year
+          </label>
+          <input
+            type="number"
+            value={goal.year || ""}
+            onChange={(e) => handleChange("year", parseInt(e.target.value))}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div className="flex justify-end space-x-4">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-gray-700 hover:text-gray-900"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            {isEditing ? "Update" : "Create"}
+          </button>
+        </div>
+      </form>
+    </Modal>
   );
 };

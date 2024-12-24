@@ -10,3 +10,19 @@ class Goal(models.Model):
     def __str__(self):
         return self.title
 
+ # Method to check if all subtasks are completed and update the main goal
+    def update_completion_status(self):
+        if self.subtasks.filter(is_completed=False).exists():
+            self.is_completed = False
+        else:
+            self.is_completed = True
+        self.save()
+
+
+class Subtask(models.Model):
+    goal = models.ForeignKey(Goal, related_name='subtasks', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    is_completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title

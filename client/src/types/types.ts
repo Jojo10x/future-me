@@ -18,3 +18,25 @@ export type NewGoal = Omit<Goal, 'id' | 'is_completed' | 'subtasks'> & {
   is_completed?: boolean;
   subtasks?: Omit<SubTask, 'id' | 'goalId'>[];
 };
+
+import { Dispatch, SetStateAction } from "react";
+
+export type BaseGoalFormProps = {
+  onSubmit: (e: React.FormEvent) => Promise<void>;
+  onClose: () => void;
+};
+
+export type EditingGoalFormProps = BaseGoalFormProps & {
+  isEditing: true;
+  goal: Goal;
+  setGoal: Dispatch<SetStateAction<Goal | null>>;
+};
+
+export type CreatingGoalFormProps = BaseGoalFormProps & {
+  isEditing: false;
+  goal: Partial<NewGoal>;
+  setGoal: Dispatch<SetStateAction<Partial<NewGoal>>>;
+};
+
+export type GoalFormProps = EditingGoalFormProps | CreatingGoalFormProps;
+

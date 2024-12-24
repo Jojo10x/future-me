@@ -1,6 +1,7 @@
 import { CheckCircle2, Edit2, Trash2 } from "lucide-react";
-import { Goal} from "@/types/types";
+import { Goal } from "@/types/types";
 import { SubTaskList } from "./SubTaskList";
+import { useState } from 'react';
 
 interface GoalItemProps {
   goal: Goal;
@@ -17,21 +18,42 @@ const GoalItem: React.FC<GoalItemProps> = ({
   onEdit,
   onSubtaskComplete,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleComplete = async () => {
+    try {
+      setIsLoading(true);
+      await onComplete();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubtaskComplete = async (subtaskId: number) => {
+    try {
+      setIsLoading(true);
+      await onSubtaskComplete(subtaskId);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div
-      className={`p-6 rounded-xl transition-all duration-300 
-      ${
-        goal.is_completed
-          ? "bg-slate-50 border border-slate-200"
-          : "bg-white border border-slate-200"
-      } 
-      hover:shadow-md`}
+      className={`p-6 rounded-xl transition-all duration-300
+        ${
+          goal.is_completed
+            ? "bg-slate-50 border border-slate-200"
+            : "bg-white border border-slate-200"
+        }
+        hover:shadow-md
+        ${isLoading ? "opacity-70 pointer-events-none" : ""}`}
     >
       <div className="space-y-4">
         <div className="flex items-start justify-between">
           <h3
             className={`text-xl font-medium text-slate-800
-            ${goal.is_completed ? "line-through text-slate-500" : ""}`}
+              ${goal.is_completed ? "line-through text-slate-500" : ""}`}
           >
             {goal.title}
           </h3>
@@ -39,19 +61,21 @@ const GoalItem: React.FC<GoalItemProps> = ({
             {goal.year}
           </span>
         </div>
-
+        
         {goal.description ? (
-  <p className="text-slate-600">{goal.description}</p>
-) : (
-  <SubTaskList
-    subtasks={goal.subtasks}
-    onComplete={(subtaskId) => onSubtaskComplete(subtaskId)}
-  />
-)}
+          <p className="text-slate-600">{goal.description}</p>
+        ) : (
+          <SubTaskList
+            subtasks={goal.subtasks}
+            onComplete={handleSubtaskComplete}
+            goalId={goal.id}
+          />
+        )}
 
         <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
           <button
-            onClick={onComplete}
+            onClick={handleComplete}
+            disabled={isLoading}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors
               ${
                 goal.is_completed
@@ -65,7 +89,8 @@ const GoalItem: React.FC<GoalItemProps> = ({
 
           <button
             onClick={onEdit}
-            className="flex items-center gap-2 px-3 py-1.5 text-slate-600 
+            disabled={isLoading}
+            className="flex items-center gap-2 px-3 py-1.5 text-slate-600
               hover:bg-slate-50 rounded-md transition-colors"
           >
             <Edit2 className="w-4 h-4" />
@@ -74,7 +99,8 @@ const GoalItem: React.FC<GoalItemProps> = ({
 
           <button
             onClick={onDelete}
-            className="flex items-center gap-2 px-3 py-1.5 text-slate-600 
+            disabled={isLoading}
+            className="flex items-center gap-2 px-3 py-1.5 text-slate-600
               hover:bg-slate-50 rounded-md transition-colors ml-auto"
           >
             <Trash2 className="w-4 h-4" />
