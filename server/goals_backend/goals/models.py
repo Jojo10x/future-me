@@ -12,11 +12,14 @@ class Goal(models.Model):
 
  # Method to check if all subtasks are completed and update the main goal
     def update_completion_status(self):
-        if self.subtasks.filter(is_completed=False).exists():
-            self.is_completed = False
-        else:
-            self.is_completed = True
-        self.save()
+         if not self.subtasks.exists():
+           self.is_completed = False  # Goals with no subtasks should not be auto-completed
+         elif self.subtasks.filter(is_completed=False).exists():
+           self.is_completed = False
+         else:
+           self.is_completed = True
+         self.save()
+
 
 
 class Subtask(models.Model):
