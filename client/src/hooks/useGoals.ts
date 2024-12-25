@@ -6,6 +6,11 @@ export function useGoals() {
   const [filterYear, setFilterYear] = useState<number | string>('');
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
   const [isAddingGoal, setIsAddingGoal] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
   const [newGoal, setNewGoal] = useState<Partial<NewGoal>>({
     title: '',
     description: '',
@@ -77,8 +82,14 @@ export function useGoals() {
       
       setIsAddingGoal(false);
       fetchGoals(); 
+      setSnackbarMessage("Goal added successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error adding goal:', error);
+      setSnackbarMessage("Failed to add goal");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
       if (error instanceof Error) {
         alert(`Failed to add goal: ${error.message}`);
       }
@@ -92,8 +103,17 @@ export function useGoals() {
       });
       if (!response.ok) throw new Error('Failed to delete goal');
       setGoals(goals.filter(goal => goal.id !== id));
+      setSnackbarMessage("Goal deleted successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error deleting goal:', error);
+      setSnackbarMessage("Failed to delete goal");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      if (error instanceof Error) {
+        alert(`Failed to delete goal: ${error.message}`);
+      }
     }
   };
 
@@ -113,9 +133,18 @@ export function useGoals() {
       }
   
       await fetchGoals();
+      setSnackbarMessage("Goal completion toggled successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error toggling goal completion:', error);
       await fetchGoals();
+      setSnackbarMessage("Failed to toggle goal completion");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      if (error instanceof Error) {
+        alert(`Failed to toggle goal completion: ${error.message}`);
+      }
     }
   };
 
@@ -152,8 +181,14 @@ export function useGoals() {
  
       setGoals(goals.map(g => (g.id === editingGoal.id ? updatedGoal : g)));
       setEditingGoal(null);
+      setSnackbarMessage("Goal updated successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error updating goal:', error);
+      setSnackbarMessage("Failed to update goal");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
       if (error instanceof Error) {
         alert(`Failed to update goal: ${error.message}`);
       }
@@ -162,43 +197,64 @@ export function useGoals() {
 
   const handleSubtaskComplete = async (goalId: number, subtaskId: number) => {
     try {
-      const goal = goals.find(g => g.id === goalId);
+      const goal = goals.find((g) => g.id === goalId);
       if (!goal) return;
-  
-      const updatedSubtasks = goal.subtasks.map(st => ({
-        ...st,
-        is_completed: st.id === subtaskId ? !st.is_completed : st.is_completed
-      }));
-  
-      const allSubtasksCompleted = updatedSubtasks.every(st => st.is_completed);
 
-      setGoals(goals.map(g => g.id === goalId ? {
-        ...g,
-        subtasks: updatedSubtasks,
-        is_completed: allSubtasksCompleted
-      } : g));
-  
-      const response = await fetch(`http://localhost:8000/api/goals/${goalId}/`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          subtasks: updatedSubtasks.map(st => ({
-            id: st.id,
-            title: st.title,
-            is_completed: st.is_completed
-          }))
-        }),
-      });
-  
+      const updatedSubtasks = goal.subtasks.map((st) => ({
+        ...st,
+        is_completed: st.id === subtaskId ? !st.is_completed : st.is_completed,
+      }));
+
+      const allSubtasksCompleted = updatedSubtasks.every(
+        (st) => st.is_completed
+      );
+
+      setGoals(
+        goals.map((g) =>
+          g.id === goalId
+            ? {
+                ...g,
+                subtasks: updatedSubtasks,
+                is_completed: allSubtasksCompleted,
+              }
+            : g
+        )
+      );
+
+      const response = await fetch(
+        `http://localhost:8000/api/goals/${goalId}/`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            subtasks: updatedSubtasks.map((st) => ({
+              id: st.id,
+              title: st.title,
+              is_completed: st.is_completed,
+            })),
+          }),
+        }
+      );
+
       if (!response.ok) {
-        throw new Error('Failed to update subtask');
+        throw new Error("Failed to update subtask");
       }
 
       fetchGoals();
+      setSnackbarMessage("Subtask updated successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
-      console.error('Error updating subtask:', error);
+      console.error("Error updating subtask:", error);
+      setSnackbarMessage("Failed to update subtask");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
       fetchGoals();
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return {
@@ -217,5 +273,9 @@ export function useGoals() {
     handleComplete,
     handleUpdateGoal,
     handleSubtaskComplete,
+    snackbarOpen,
+    snackbarMessage,
+    snackbarSeverity,
+    handleSnackbarClose,
   };
 }

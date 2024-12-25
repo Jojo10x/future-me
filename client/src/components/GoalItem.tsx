@@ -22,6 +22,7 @@ const GoalItem: React.FC<GoalItemProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [showCompletionEffect, setShowCompletionEffect] = useState(false);
 
+
   const handleComplete = async () => {
     try {
       setIsLoading(true);
