@@ -3,6 +3,7 @@ import { AddGoalButton } from "./AddGoalButton";
 import ProgressTracker from "./ProgressTracker";
 import logo from "../../public/logo--text----future-me.svg";
 import Image from "next/image";
+import { ProfileBtn } from "./ProfileBtn";
 
 type HeaderProps = {
   goals: Goal[];
@@ -19,13 +20,15 @@ export const Header: React.FC<HeaderProps> = ({ goals, onAddGoal }) => (
         alt="PixelTochka Logo"
         className="ml-2"
       />
-      <div className="sm:hidden">
+      <div className="flex space-x-4 sm:hidden">
         <AddGoalButton onClick={onAddGoal} />
+        <ProfileBtn />
       </div>
     </div>
     <ProgressTracker goals={goals} />
-    <div className="hidden sm:block">
+    <div className="hidden sm:flex space-x-4">
       <AddGoalButton onClick={onAddGoal} />
+      <ProfileBtn />
     </div>
   </div>
 );

@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${firaCode.variable} antialiased  dark:bg-gray-900`}>
+      <body className={`${inter.variable} ${firaCode.variable} antialiased  bg-lime-600 `}>
         {children}
       </body>
     </html>

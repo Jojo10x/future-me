@@ -26,14 +26,14 @@ export const AddGoalButton: React.FC<AddGoalButtonProps> = ({ onClick }) => {
         group
         relative
         p-3
-        bg-blue-600 
-        hover:bg-blue-700 
+        bg-lime-600 
+        hover:bg-lime-700 
         rounded-full
         transition-all 
         duration-200
         focus:outline-none 
         focus:ring-2 
-        focus:ring-blue-500 
+        focus:ring-green-500 
         focus:ring-offset-2
         disabled:opacity-50
       "
