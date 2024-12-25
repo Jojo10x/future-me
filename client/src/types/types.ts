@@ -12,6 +12,8 @@ export interface Goal {
   subtasks: SubTask[];
   year: number;
   is_completed: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export type NewGoal = Omit<Goal, 'id' | 'is_completed' | 'subtasks'> & {

@@ -11,7 +11,7 @@ class GoalSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Goal
-        fields = ['id', 'title', 'description', 'year', 'is_completed', 'subtasks']
+        fields = ['id', 'title', 'description', 'year', 'is_completed', 'subtasks','created_at','updated_at']
 
     def create(self, validated_data):
         subtasks_data = validated_data.pop('subtasks', [])
