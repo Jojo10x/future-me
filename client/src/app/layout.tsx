@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
-import { Loader } from "lucide-react";
+import Loader from "@/components/Loader";
 import { Suspense } from "react";
 
 const inter = Inter({
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${firaCode.variable} antialiased  bg-lime-600 `}
+        className={`${inter.variable} ${firaCode.variable} antialiased bg-green-800 `}
       >
         <Suspense fallback={<Loader />}>{children}</Suspense>
       </body>

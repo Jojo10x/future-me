@@ -1,18 +1,18 @@
-import logo from "../../public/logo--text----future-me.svg";
 import Image from "next/image";
+import logo from "../../public/logo-called----future-me (1).svg";
 
 const Loader = () => {
   return (
-    <div className="fixed inset-0 flex flex-col justify-center items-center bg-white z-50">
+    <div className="fixed inset-0 flex flex-col justify-center items-center bg-white z-[9999]">
       <Image
-        width={100}
-        height={100}
+        width={200}
+        height={200}
         src={logo}
         alt="Future ME Logo"
-        className="ml-2"
+        className="object-contain"
       />
-      <div className="relative w-full mt-2">
-        <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 w-0 h-[2px] bg-black animate-expand"></div>
+      <div className="relative w-3/4 mt-4">
+        <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 w-[100px] h-[2px] bg-black animate-expand"></div>
       </div>
     </div>
   );

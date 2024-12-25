@@ -81,13 +81,13 @@ loader logo  */
 
 @keyframes expand {
   0% {
-      width: 0;
+    width: 0;
   }
   50% {
-      width: 100px;
+    width: 100px;
   }
   100% {
-      width: 0;
+    width: 0;
   }
 }
 
