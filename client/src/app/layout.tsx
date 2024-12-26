@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${firaCode.variable} antialiased bg-green-800 `}
+        className={`${inter.variable} ${firaCode.variable} antialiased classit `}
       >
         <Suspense fallback={<Loader />}>{children}</Suspense>
       </body>

@@ -1,9 +1,17 @@
 import React from "react";
 import { UserIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const ProfileBtn = () => {
+  const router = useRouter();
+
+  const handleNav = () => {
+    router.push("/profile");
+  };
+
   return (
     <button
+      onClick={handleNav}
       className="
         group
         relative

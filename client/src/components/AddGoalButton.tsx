@@ -8,11 +8,13 @@ type AddGoalButtonProps = {
 
 export const AddGoalButton: React.FC<AddGoalButtonProps> = ({ onClick }) => {
   const [isLoading, setIsLoading] = useState(false);
+  
 
   const handleClick = async () => {
     setIsLoading(true);
     try {
       await onClick();
+     
     } finally {
       setIsLoading(false);
     }
