@@ -41,7 +41,7 @@ const GoalProgressTracker = ({ goals }: GoalProgressTrackerProps) => {
       <div className="flex justify-center mb-4">
         <div className="text-center">
           <p className="text-xs text-slate-600">
-            {goals.filter((goal) => goal.is_completed).length} of {goals.length}{" "}
+            {goals.filter((goal) => goal.is_completed).length} of {goals.length}
             goals completed
           </p>
         </div>

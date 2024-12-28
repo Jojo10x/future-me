@@ -5,15 +5,22 @@ import { LogOut, ArrowLeft, User as UserIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { User } from "@/types/user";
+import { Goal } from "@/types/types"; 
 import { getUser } from "@/utils/api";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
+import { useGoals } from "@/hooks/useGoals";
+import GoalDashboard from "@/components/GoalDashboard";
+interface ExtendedUser extends User {
+  goals: Goal[];
+}
 
 const Profile = () => {
-  const [userr, setUser] = useState<User | null>(null);
+  const [userr, setUser] = useState<ExtendedUser | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { user, loading, logout } = useAuth();
+  const { goals } = useGoals();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -26,7 +33,7 @@ const Profile = () => {
       try {
         const userData = await getUser();
         if (userData) {
-          setUser(userData);
+          setUser(userData as ExtendedUser);
         } else {
           setError("User not found");
         }
@@ -37,6 +44,7 @@ const Profile = () => {
     };
     fetchUser();
   }, []);
+
 
   const handleGoBack = () => {
     router.push("/");
@@ -51,7 +59,7 @@ const Profile = () => {
     }
   };
 
-  if (loading) {<Loader/>}
+  if (loading) return <Loader />;
 
   if (error) {
     return (
@@ -68,7 +76,7 @@ const Profile = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen classit">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-2xl mx-auto p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -89,7 +97,7 @@ const Profile = () => {
         </div>
 
         {/* Profile Card */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white rounded-lg shadow border border-gray-200">
           <div className="p-6 space-y-6">
             <h1 className="text-2xl font-bold tracking-tight text-gray-900">
               Profile
@@ -107,9 +115,10 @@ const Profile = () => {
                 <p className="text-sm text-gray-500">{userr?.email}</p>
               </div>
             </div>
-
           </div>
         </div>
+
+        <GoalDashboard goals={goals} />
       </div>
       <Footer />
     </div>
