@@ -39,6 +39,15 @@ export const GoalView = ({ goals }: { goals: Goal[] }) => {
     }
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
   const SortIcon = ({ field }: { field: typeof sortField }) => {
     if (field !== sortField) return null;
     return (
@@ -120,7 +129,7 @@ export const GoalView = ({ goals }: { goals: Goal[] }) => {
                         {goal.title}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(goal.created_at).toLocaleDateString()}
+                        {formatDate(goal.created_at)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {completedSubtasks}/{goal.subtasks.length}

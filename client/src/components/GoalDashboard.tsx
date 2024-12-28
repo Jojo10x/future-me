@@ -1,7 +1,7 @@
 import { Goal } from "@/types/types";
-import { ListTodo, BarChart, Database } from "lucide-react";
+import { ListTodo, BarChart, Calendar } from "lucide-react";
 import { useState } from "react";
-import { DataView } from "./Dataview";
+import  YearComparison from "./YearComparison ";
 import { GraphsView } from "./GraphsView";
 import { GoalView } from "./GoalView";
 
@@ -48,14 +48,14 @@ const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
           >
-            <Database className="h-4 w-4" />
-            Data
+            <Calendar className="h-4 w-4" />
+            Year
           </button>
         </div>
 
         {activeView === "goals" && <GoalView goals={goals} />}
         {activeView === "graphs" && <GraphsView goals={goals} />}
-        {activeView === "data" && <DataView goals={goals} />}
+        {activeView === "data" && <YearComparison  goals={goals} />}
       </div>
     </div>
   );
