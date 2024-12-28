@@ -3,6 +3,7 @@ import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
 import Loader from "@/components/Loader";
 import { Suspense } from "react";
+import { AuthProvider } from "./context/AuthContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,7 +30,10 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${firaCode.variable} antialiased classit `}
       >
-        <Suspense fallback={<Loader />}>{children}</Suspense>
+        <Suspense fallback={<Loader />}>
+          {" "}
+          <AuthProvider>{children}</AuthProvider>
+        </Suspense>
       </body>
     </html>
   );

@@ -22,11 +22,35 @@ export function useGoals() {
     fetchGoals();
   }, [filterYear]);
 
+  // const fetchGoals = async () => {
+  //   try {
+  //     const token = localStorage.getItem('access_token');
+  //   if (!token) throw new Error('No access token found');
+  //     let url = 'http://localhost:8000/api/goals/';
+  //     if (filterYear) url += `?year=${filterYear}`;
+  //     const response = await fetch(url);
+  //     if (!response.ok) throw new Error('Failed to fetch goals');
+  //     const data = await response.json();
+  //     setGoals(data);
+  //   } catch (error) {
+  //     console.error('Error fetching goals:', error);
+  //   }
+  // };
   const fetchGoals = async () => {
     try {
+      const token = localStorage.getItem('access_token');
+      if (!token) throw new Error('No access token found');
+      
       let url = 'http://localhost:8000/api/goals/';
       if (filterYear) url += `?year=${filterYear}`;
-      const response = await fetch(url);
+      
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+  
       if (!response.ok) throw new Error('Failed to fetch goals');
       const data = await response.json();
       setGoals(data);
@@ -39,6 +63,8 @@ export function useGoals() {
   const handleAddGoal = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('access_token');
+    if (!token) throw new Error('No access token found');
       const goalData = {
         title: newGoal.title,
         description: newGoal.description || '',
@@ -54,7 +80,10 @@ export function useGoals() {
   
       const response = await fetch('http://localhost:8000/api/goals/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Authorization': `Bearer ${token}`,  // Add the token to headers
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           title: goalData.title,
           description: goalData.description,
@@ -98,8 +127,14 @@ export function useGoals() {
 
   const handleDelete = async (id: number) => {
     try {
+      const token = localStorage.getItem('access_token');
+    if (!token) throw new Error('No access token found');
       const response = await fetch(`http://localhost:8000/api/goals/${id}/`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,  // Add the token to headers
+          'Content-Type': 'application/json'
+        }
       });
       if (!response.ok) throw new Error('Failed to delete goal');
       setGoals(goals.filter(goal => goal.id !== id));
@@ -119,13 +154,18 @@ export function useGoals() {
 
   const handleComplete = async (goal: Goal) => {
     try {
+      const token = localStorage.getItem('access_token');
+    if (!token) throw new Error('No access token found');
       setGoals(goals.map(g =>
         g.id === goal.id ? { ...g, is_completed: !g.is_completed } : g
       ));
   
       const response = await fetch(`http://localhost:8000/api/goals/${goal.id}/toggle_completion/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Authorization': `Bearer ${token}`,  // Add the token to headers
+          'Content-Type': 'application/json'
+        }
       });
   
       if (!response.ok) {
@@ -153,6 +193,8 @@ export function useGoals() {
     if (!editingGoal?.id) return;
   
     try {
+      const token = localStorage.getItem('access_token');
+    if (!token) throw new Error('No access token found');
       const updatePayload = {
         title: editingGoal.title,
         description: editingGoal.description,
@@ -168,7 +210,10 @@ export function useGoals() {
   
       const response = await fetch(`http://localhost:8000/api/goals/${editingGoal.id}/`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Authorization': `Bearer ${token}`,  // Add the token to headers
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(updatePayload),
       });
   
@@ -197,6 +242,8 @@ export function useGoals() {
 
   const handleSubtaskComplete = async (goalId: number, subtaskId: number) => {
     try {
+      const token = localStorage.getItem('access_token');
+    if (!token) throw new Error('No access token found');
       const goal = goals.find((g) => g.id === goalId);
       if (!goal) return;
 
@@ -225,7 +272,10 @@ export function useGoals() {
         `http://localhost:8000/api/goals/${goalId}/`,
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            'Authorization': `Bearer ${token}`,  // Add the token to headers
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify({
             subtasks: updatedSubtasks.map((st) => ({
               id: st.id,
