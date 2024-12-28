@@ -3,6 +3,7 @@ import { ListTodo, BarChart, Database } from "lucide-react";
 import { useState } from "react";
 import { DataView } from "./Dataview";
 import { GraphsView } from "./GraphsView";
+import { GoalView } from "./GoalView";
 
 const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
   const [activeView, setActiveView] = useState<"goals" | "graphs" | "data">(
@@ -52,7 +53,7 @@ const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
           </button>
         </div>
 
-        {activeView === "goals" && <DataView goals={goals} />}
+        {activeView === "goals" && <GoalView goals={goals} />}
         {activeView === "graphs" && <GraphsView goals={goals} />}
         {activeView === "data" && <DataView goals={goals} />}
       </div>

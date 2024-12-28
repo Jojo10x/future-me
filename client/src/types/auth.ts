@@ -10,14 +10,14 @@ export interface AuthState {
 }
 
 export interface LoginCredentials {
-  email: string;      // Changed from username to email to match backend
+  email: string;    
   password: string;
 }
 
 export interface RegisterCredentials {
   email: string;
   password: string;
-  fullName: string;   // Changed to match backend's full_name
+  fullName: string;   
 }
 
 export interface AuthTokens {
