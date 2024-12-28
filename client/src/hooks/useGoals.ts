@@ -273,7 +273,7 @@ export function useGoals() {
         {
           method: "PATCH",
           headers: {
-            'Authorization': `Bearer ${token}`,  // Add the token to headers
+            'Authorization': `Bearer ${token}`,  
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({

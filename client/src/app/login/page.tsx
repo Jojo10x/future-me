@@ -8,6 +8,7 @@ export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [credentials, setCredentials] = useState<LoginCredentials & RegisterCredentials>({
     email: '',
     password: '',
@@ -15,6 +16,21 @@ export default function AuthForm() {
   });
   const [error, setError] = useState('');
   const { login, register } = useAuth();
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    const savedPassword = localStorage.getItem('rememberedPassword');
+    
+    if (savedEmail && savedPassword) {
+      setCredentials(prev => ({
+        ...prev,
+        email: savedEmail,
+        password: savedPassword
+      }));
+      setRememberMe(true);
+    }
+  }, []);
+
   useEffect(() => {
     setCredentials({ email: '', password: '', fullName: '' });
     setError('');
@@ -34,6 +50,16 @@ export default function AuthForm() {
           password: credentials.password,
         };
         success = await login(loginData);
+        
+        
+        if (success && rememberMe) {
+          localStorage.setItem('rememberedEmail', credentials.email);
+          localStorage.setItem('rememberedPassword', credentials.password);
+        } else if (!rememberMe) {
+          localStorage.removeItem('rememberedEmail');
+          localStorage.removeItem('rememberedPassword');
+        }
+        
         if (!success) setError('Invalid email or password');
       } else {
         const registerData: RegisterCredentials = {
@@ -42,7 +68,16 @@ export default function AuthForm() {
           fullName: credentials.fullName,
         };
         success = await register(registerData);
-        if (!success) setError('Registration failed. Please try again.');
+        if (success) {
+          
+          const loginData: LoginCredentials = {
+            email: credentials.email,
+            password: credentials.password,
+          };
+          await login(loginData);
+        } else {
+          setError('Registration failed. Please try again.');
+        }
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
@@ -61,11 +96,11 @@ export default function AuthForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center classit p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <div className="max-w-md w-full transform transition-all duration-300 ease-in-out">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header Section */}
-          <div className="relative h-32 bg-gradient-to-r from-blue-600 to-indigo-600 p-8">
+          <div className="relative h-32 bg-lime-600 p-8">
             <h2 className="text-3xl font-bold text-white text-center">
               {isLogin ? 'Welcome Back' : 'Create Account'}
             </h2>
@@ -141,10 +176,25 @@ export default function AuthForm() {
                 </button>
               </div>
 
+              {isLogin && (
+                <div className="flex items-center">
+                  <input
+                    id="remember-me"
+                    type="checkbox"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                  />
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                    Remember me
+                  </label>
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-lime-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -174,14 +224,6 @@ export default function AuthForm() {
             </div>
           </div>
         </div>
-
-        {/* Additional info footer */}
-        {/* <div className="text-center mt-4 text-sm text-gray-600">
-          By continuing, you agree to our
-          <a href="#" className="text-blue-600 hover:text-blue-500 mx-1">Terms of Service</a>
-          and
-          <a href="#" className="text-blue-600 hover:text-blue-500 mx-1">Privacy Policy</a>
-        </div> */}
       </div>
     </div>
   );
