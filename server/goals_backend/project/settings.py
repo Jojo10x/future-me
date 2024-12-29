@@ -22,7 +22,8 @@ SIMPLE_JWT = {
 ALLOWED_HOSTS = [
     'future-me.onrender.com',
     'localhost',
-    '127.0.0.1',
+    '0.0.0.0',
+    'https://future-me.onrender.com'
 ]
 
 CORS_ALLOWED_ORIGINS = [
