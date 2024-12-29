@@ -1,5 +1,6 @@
 from pathlib import Path
 from decouple import Config
+from datetime import timedelta
 import os
 import dj_database_url
 
@@ -12,6 +13,13 @@ SECRET_KEY = 'django-insecure-y&yfefj(!@f(fq%1_&*7n@lbf5u(#0z1wmin06at4da^zc))c5
 
 DEBUG = True
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
 ALLOWED_HOSTS = [
     'future-me.onrender.com',
     'localhost',
@@ -19,18 +27,13 @@ ALLOWED_HOSTS = [
 ]
 CORS_ALLOWED_ORIGINS = [
     'https://futuremee.vercel.app',
-    'http://futuremee.vercel.app',
-    'http://localhost:3000',
+    'http://localhost:3000'
 ]
-CORS_ORIGIN_WHITELIST = [
-    'https://futuremee.vercel.app',
-    'http://futuremee.vercel.app',
-    'http://localhost:3000',
-]
+
 CSRF_TRUSTED_ORIGINS = [
     'https://futuremee.vercel.app',
-    'http://futuremee.vercel.app',
     'http://localhost:3000',
+    'https://future-me.onrender.com'
 ]
 
 INSTALLED_APPS = [
@@ -49,10 +52,10 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -102,11 +105,10 @@ CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
-
 # Rest Framework settings (combine the duplicate entries)
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [

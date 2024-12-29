@@ -36,7 +36,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await fetch(`${API}/api/profile/`, {
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
+        mode: 'cors', 
       });
 
       if (response.ok) {
@@ -71,6 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: credentials.email,
           password: credentials.password
         }),
+        mode: 'cors', 
       });
 
       if (response.ok) {
@@ -100,6 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           password: credentials.password,
           full_name: credentials.fullName 
         }),
+        mode: 'cors', 
       });
 
       if (response.ok) {
