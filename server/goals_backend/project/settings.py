@@ -17,13 +17,19 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
 ]
-# CORS Configuration
 CORS_ALLOWED_ORIGINS = [
+    'https://futuremee.vercel.app',
+    'http://futuremee.vercel.app',
     'http://localhost:3000',
-    'futuremee.vercel.app'
+]
+CORS_ORIGIN_WHITELIST = [
+    'https://futuremee.vercel.app',
+    'http://futuremee.vercel.app',
+    'http://localhost:3000',
 ]
 CSRF_TRUSTED_ORIGINS = [
     'https://futuremee.vercel.app',
+    'http://futuremee.vercel.app',
     'http://localhost:3000',
 ]
 
@@ -54,7 +60,9 @@ MIDDLEWARE = [
 ]
 
 
-CORS_ALLOW_CREDENTIALS = True  # Add this for credentials support
+CORS_ALLOW_CREDENTIALS = True  
+CORS_ALLOW_ALL_HEADERS = True
+DEBUG = True 
 
 # Add CORS allowed headers
 CORS_ALLOW_HEADERS = [
