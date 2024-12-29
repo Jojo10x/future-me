@@ -23,3 +23,28 @@ export const getUser = async (): Promise<User | null> => {
     return null;
   }
 };
+
+export const updateUser = async (userData: {
+  full_name?: string;
+  email?: string;
+}): Promise<User> => {
+  const token = localStorage.getItem("access_token");
+  if (!token) throw new Error("No access token found");
+
+  const response = await fetch("http://localhost:8000/api/profile/", {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    console.error("Update error details:", errorData);
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+};

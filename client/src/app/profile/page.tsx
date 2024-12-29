@@ -1,16 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { LogOut, ArrowLeft, User as UserIcon } from "lucide-react";
+import { LogOut, ArrowLeft} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { User } from "@/types/user";
 import { Goal } from "@/types/types"; 
-import { getUser } from "@/utils/api";
+import { getUser, updateUser } from "@/utils/api";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
 import { useGoals } from "@/hooks/useGoals";
 import GoalDashboard from "@/components/GoalDashboard";
+import EditableProfileCard from "@/components/EditableProfileCard";
 interface ExtendedUser extends User {
   goals: Goal[];
 }
@@ -44,6 +45,16 @@ const Profile = () => {
     };
     fetchUser();
   }, []);
+
+  const handleProfileUpdate = async (updatedData: { full_name?: string; email?: string }) => {
+    try {
+      const updatedUser = await updateUser(updatedData);
+      setUser(updatedUser as ExtendedUser);
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      throw error; 
+    }
+  };
 
 
   const handleGoBack = () => {
@@ -96,27 +107,10 @@ const Profile = () => {
           </button>
         </div>
 
-        {/* Profile Card */}
-        <div className="bg-white rounded-lg shadow border border-gray-200">
-          <div className="p-6 space-y-6">
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-              Profile
-            </h1>
-
-            {/* Profile Info */}
-            <div className="flex items-center gap-4">
-              <div className="h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center">
-                <UserIcon className="h-8 w-8 text-gray-400" />
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900">
-                  {userr?.full_name || "Loading..."}
-                </h2>
-                <p className="text-sm text-gray-500">{userr?.email}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <EditableProfileCard 
+          user={userr} 
+          onSave={handleProfileUpdate}
+        />
 
         <GoalDashboard goals={goals} />
       </div>

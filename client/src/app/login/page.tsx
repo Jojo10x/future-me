@@ -51,7 +51,6 @@ export default function AuthForm() {
         };
         success = await login(loginData);
         
-        
         if (success && rememberMe) {
           localStorage.setItem('rememberedEmail', credentials.email);
           localStorage.setItem('rememberedPassword', credentials.password);
@@ -60,7 +59,9 @@ export default function AuthForm() {
           localStorage.removeItem('rememberedPassword');
         }
         
-        if (!success) setError('Invalid email or password');
+        if (!success) 
+          setError('Invalid email or password');
+        
       } else {
         const registerData: RegisterCredentials = {
           email: credentials.email,
@@ -80,7 +81,7 @@ export default function AuthForm() {
         }
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -94,6 +95,7 @@ export default function AuthForm() {
       [id]: value
     }));
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">

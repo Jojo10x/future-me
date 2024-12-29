@@ -10,6 +10,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'full_name')
         read_only_fields = ('id',)
+    def update(self, instance, validated_data):
+        # Update the user instance
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
@@ -33,7 +39,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         user = User.objects.create(
             email=validated_data['email'],
-            username=validated_data['email'],  # Set username to email
+            username=validated_data['email'],  
             full_name=validated_data['full_name']
         )
         user.set_password(validated_data['password'])
