@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.conf import settings
 
@@ -12,6 +13,7 @@ class Goal(models.Model):
     year = models.IntegerField() 
     is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -24,6 +26,7 @@ class Goal(models.Model):
             self.is_completed = False
         else:
             self.is_completed = True
+            self.completed_at = timezone.now()
         self.save()
 
 class Subtask(models.Model):

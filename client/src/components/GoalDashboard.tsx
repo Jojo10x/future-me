@@ -1,12 +1,13 @@
 import { Goal } from "@/types/types";
-import { ListTodo, BarChart, Calendar } from "lucide-react";
+import { ListTodo, BarChart, Calendar, Clock } from "lucide-react";
 import { useState } from "react";
 import  YearComparison from "./YearComparison ";
 import { GraphsView } from "./GraphsView";
 import { GoalView } from "./GoalView";
+import GoalTimeAnalytics from "./GoalTimeAnalytics";
 
 const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
-  const [activeView, setActiveView] = useState<"goals" | "graphs" | "data">(
+  const [activeView, setActiveView] = useState<"goals" | "graphs" | "data" | "time">(
     "goals"
   );
 
@@ -14,7 +15,7 @@ const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
     <div className="mt-6 bg-white rounded-lg shadow-lg border border-gray-200">
       <div className="p-6">
         {/* View Selection Buttons */}
-        <div className="flex space-x-4 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6">
           <button
             onClick={() => setActiveView("goals")}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
@@ -51,11 +52,25 @@ const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
             <Calendar className="h-4 w-4" />
             Year
           </button>
+          <button
+            onClick={() => setActiveView("time")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
+                ${
+                  activeView === "time"
+                    ? "bg-gray-900 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+          >
+            <Clock className="h-4 w-4" />
+            Time
+          </button> 
         </div>
 
         {activeView === "goals" && <GoalView goals={goals} />}
         {activeView === "graphs" && <GraphsView goals={goals} />}
         {activeView === "data" && <YearComparison  goals={goals} />}
+        {activeView === "time" && <GoalTimeAnalytics goals={goals} />}
+        
       </div>
     </div>
   );

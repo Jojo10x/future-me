@@ -14,6 +14,7 @@ export interface Goal {
   is_completed: boolean;
   created_at: string;
   updated_at: string;
+  completed_at?: string;
 }
 
 export type NewGoal = Omit<Goal, 'id' | 'is_completed' | 'subtasks'> & {

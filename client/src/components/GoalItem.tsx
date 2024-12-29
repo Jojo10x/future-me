@@ -45,6 +45,10 @@ const GoalItem: React.FC<GoalItemProps> = ({
 
   const createdDate = goal.created_at.split("T")[0];
   const updatedDate = goal.updated_at.split("T")[0];
+  const completedDate = goal.completed_at ? goal.completed_at.split("T")[0] : null;
+
+
+  console.log('completed date:', completedDate)
 
   return (
     <div
@@ -86,6 +90,9 @@ const GoalItem: React.FC<GoalItemProps> = ({
             <span className="py-1 text-xs lg:text-sm font-medium text-slate-500 transition-all duration-300">
               Created: {createdDate}{" "}
               {createdDate !== updatedDate && ` • Updated: ${updatedDate}`}
+            </span>
+            <span className="flex justify-center text-l">
+              {goal.is_completed && `Completed: ${completedDate}`}
             </span>
           </div>
 
@@ -131,42 +138,51 @@ const GoalItem: React.FC<GoalItemProps> = ({
              transition-all duration-300 animate-fade-in
               ${
                 goal.is_completed
-               ? "bg-emerald-100 text-emerald-700"
-                : "bg-slate-100 text-slate-600 group-hover:bg-slate-200"
+                  ? "bg-emerald-100 text-emerald-700"
+                  : "bg-slate-100 text-slate-600 group-hover:bg-slate-200"
               }`}
           >
             {goal.year}
           </span>
           <button
-        onClick={handleComplete}
-        disabled={isLoading}
-        className="p-2 text-gray-600 transition-all duration-300 hover:scale-125 disabled:opacity-50 "
-        aria-label={goal.is_completed ? "Uncomplete" : "Complete"}
-      >
-        {goal.is_completed ? (
-          <Undo2 className="w-6 h-6 transform inline-block transition-transform" color="blue" />
-        ) : (
-          <CheckCircle className="w-6 h-6 transform inline-block transition-transform"  color="green" />
-        )}
-      </button>
+            onClick={handleComplete}
+            disabled={isLoading}
+            className="p-2 text-gray-600 transition-all duration-300 hover:scale-125 disabled:opacity-50 "
+            aria-label={goal.is_completed ? "Uncomplete" : "Complete"}
+          >
+            {goal.is_completed ? (
+              <Undo2
+                className="w-6 h-6 transform inline-block transition-transform"
+                color="blue"
+              />
+            ) : (
+              <CheckCircle
+                className="w-6 h-6 transform inline-block transition-transform"
+                color="green"
+              />
+            )}
+          </button>
 
-      <button
-        onClick={onEdit}
-        disabled={isLoading}
-        className="p-2 text-gray-600 transition-all duration-300 hover:scale-125 disabled:opacity-50"
-        aria-label="Edit"
-      >
-        <Pencil className="w-6 h-6 transform inline-block transition-transform" />
-      </button>
+          <button
+            onClick={onEdit}
+            disabled={isLoading}
+            className="p-2 text-gray-600 transition-all duration-300 hover:scale-125 disabled:opacity-50"
+            aria-label="Edit"
+          >
+            <Pencil className="w-6 h-6 transform inline-block transition-transform" />
+          </button>
 
-      <button
-        onClick={onDelete}
-        disabled={isLoading}
-        className="p-2 text-gray-600 transition-all duration-300 hover:scale-125 disabled:opacity-50 hover:text-red-100"
-        aria-label="Delete"
-      >
-        <Trash2 className="w-6 h-6 transform inline-block transition-transform" color="red" />
-      </button>
+          <button
+            onClick={onDelete}
+            disabled={isLoading}
+            className="p-2 text-gray-600 transition-all duration-300 hover:scale-125 disabled:opacity-50 hover:text-red-100"
+            aria-label="Delete"
+          >
+            <Trash2
+              className="w-6 h-6 transform inline-block transition-transform"
+              color="red"
+            />
+          </button>
         </div>
       </div>
     </div>

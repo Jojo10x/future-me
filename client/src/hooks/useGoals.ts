@@ -132,7 +132,7 @@ export function useGoals() {
       const response = await fetch(`http://localhost:8000/api/goals/${id}/`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${token}`,  // Add the token to headers
+          'Authorization': `Bearer ${token}`, 
           'Content-Type': 'application/json'
         }
       });
@@ -163,7 +163,7 @@ export function useGoals() {
       const response = await fetch(`http://localhost:8000/api/goals/${goal.id}/toggle_completion/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,  // Add the token to headers
+          'Authorization': `Bearer ${token}`, 
           'Content-Type': 'application/json'
         }
       });
@@ -211,7 +211,7 @@ export function useGoals() {
       const response = await fetch(`http://localhost:8000/api/goals/${editingGoal.id}/`, {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${token}`,  // Add the token to headers
+          'Authorization': `Bearer ${token}`, 
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(updatePayload),

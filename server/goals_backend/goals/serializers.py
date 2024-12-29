@@ -11,7 +11,7 @@ class GoalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Goal
-        fields = ['id', 'title', 'description', 'year', 'is_completed', 'subtasks', 'created_at', 'updated_at']
+        fields = ['id', 'title', 'description', 'year', 'is_completed', 'subtasks', 'created_at', 'updated_at','completed_at']
         read_only_fields = ['user']
 
     def create(self, validated_data):

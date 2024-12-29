@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -22,6 +23,10 @@ class GoalViewSet(viewsets.ModelViewSet):
         goal = self.get_object()  
         
         goal.is_completed = not goal.is_completed
+        if goal.is_completed:
+         goal.completed_at = timezone.now()
+        else:
+         goal.completed_at = None
         goal.save()
 
         
