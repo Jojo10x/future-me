@@ -36,12 +36,14 @@ export function useGoals() {
   //     console.error('Error fetching goals:', error);
   //   }
   // };
+
+  const API = 'https://future-me.onrender.com';
   const fetchGoals = async () => {
     try {
       const token = localStorage.getItem('access_token');
       if (!token) throw new Error('No access token found');
       
-      let url = 'http://localhost:8000/api/goals/';
+      let url = `${API}/api/goals/`;
       if (filterYear) url += `?year=${filterYear}`;
       
       const response = await fetch(url, {
@@ -78,7 +80,7 @@ export function useGoals() {
         })) || []
       };
   
-      const response = await fetch('http://localhost:8000/api/goals/', {
+      const response = await fetch(`${API}/api/goals/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,  // Add the token to headers
@@ -129,7 +131,7 @@ export function useGoals() {
     try {
       const token = localStorage.getItem('access_token');
     if (!token) throw new Error('No access token found');
-      const response = await fetch(`http://localhost:8000/api/goals/${id}/`, {
+      const response = await fetch(`${API}/api/goals/${id}/`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`, 
@@ -160,7 +162,7 @@ export function useGoals() {
         g.id === goal.id ? { ...g, is_completed: !g.is_completed } : g
       ));
   
-      const response = await fetch(`http://localhost:8000/api/goals/${goal.id}/toggle_completion/`, {
+      const response = await fetch(`${API}/api/goals/${goal.id}/toggle_completion/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`, 
@@ -208,7 +210,7 @@ export function useGoals() {
         }))
       };
   
-      const response = await fetch(`http://localhost:8000/api/goals/${editingGoal.id}/`, {
+      const response = await fetch(`${API}/api/goals/${editingGoal.id}/`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`, 
@@ -269,7 +271,7 @@ export function useGoals() {
       );
 
       const response = await fetch(
-        `http://localhost:8000/api/goals/${goalId}/`,
+        `${API}/api/goals/${goalId}/`,
         {
           method: "PATCH",
           headers: {

@@ -43,6 +43,7 @@ MIDDLEWARE = [
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'futuremee.vercel.app'
 ]
 CORS_ALLOW_CREDENTIALS = True  # Add this for credentials support
 

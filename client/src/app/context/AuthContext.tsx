@@ -19,6 +19,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading: true,
   });
   const router = useRouter();
+  const API = 'https://future-me.onrender.com';
 
   useEffect(() => {
     checkAuth();
@@ -32,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      const response = await fetch('http://localhost:8000/api/profile/', {
+      const response = await fetch(`${API}/api/profile/`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -61,7 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     try {
-      const response = await fetch('http://localhost:8000/api/login/', {
+      const response = await fetch(`${API}/api/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const register = async (credentials: RegisterCredentials): Promise<boolean> => {
     try {
-      const response = await fetch('http://localhost:8000/api/register/', {
+      const response = await fetch(`${API}/api/register/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
