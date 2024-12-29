@@ -14,7 +14,6 @@ const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
   return (
     <div className="mt-6 bg-white rounded-lg shadow-lg border border-gray-200">
       <div className="p-6">
-        {/* View Selection Buttons */}
         <div className="flex flex-wrap gap-2 mb-6">
           <button
             onClick={() => setActiveView("goals")}
