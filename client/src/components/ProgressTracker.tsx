@@ -41,14 +41,13 @@ const GoalProgressTracker = ({ goals }: GoalProgressTrackerProps) => {
       <div className="flex justify-center mb-4">
         <div className="text-center">
           <p className="text-xs text-slate-600">
-            {goals.filter((goal) => goal.is_completed).length} of {goals.length}
-            goals completed
+            {goals.filter((goal) => goal.is_completed).length} of {goals.length} goals completed
           </p>
         </div>
       </div>
 
       <div className="relative mb-4">
-        <div className="w-full bg-slate-100 rounded-full h-3 sm:h-4">
+        <div className="w-full bg-slate-300 rounded-full h-3 sm:h-4">
           <div
             className={`${getProgressColor()} h-full rounded-full transition-all duration-1000 ease-out relative`}
             style={{ width: `${progress}%` }}

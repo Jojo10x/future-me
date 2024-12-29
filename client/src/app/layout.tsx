@@ -4,6 +4,7 @@ import "./globals.css";
 import Loader from "@/components/Loader";
 import { Suspense } from "react";
 import { AuthProvider } from "./context/AuthContext";
+import Head from "next/head";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -27,11 +28,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="icon" href="client/public/logo--text----future-me.svg" />
+      </Head>
       <body
-        className={`${inter.variable} ${firaCode.variable} antialiased classit `}
+        className={`${inter.variable} ${firaCode.variable} antialiased bg-gray-50 `}
       >
         <Suspense fallback={<Loader />}>
-          {" "}
           <AuthProvider>{children}</AuthProvider>
         </Suspense>
       </body>

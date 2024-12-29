@@ -1,4 +1,4 @@
-import logo from "../../public/logo.svg";
+import logo from "../../public/logoBlack.svg";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
@@ -28,7 +28,7 @@ const Footer = () => {
   return (
     <div className="text-center py-8 text-white">
       <p className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-yellow-500 to-blue-500 animate-gradient bg-[length:400%] ">{quote}</p>
-      <h3 className="text-sm text-slate-400 flex justify-center items-center hover:text-blue-500 hover:underline cursor-pointer transition-all">
+      <h3 className="text-sm text-slate-400 flex justify-center items-center hover:text-black  cursor-pointer transition-all">
         Powered by:
         <a href="https://pixeltochka.tech/" target="_blank" rel="noopener noreferrer">
         <Image

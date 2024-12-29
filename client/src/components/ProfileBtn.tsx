@@ -16,8 +16,8 @@ export const ProfileBtn = () => {
         group
         relative
         p-3
-        bg-lime-600 
-        hover:bg-lime-700 
+        dark:bg-gray-800
+        hover:bg-emerald-700
         rounded-full
         transition-all 
         duration-200

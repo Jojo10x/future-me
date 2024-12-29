@@ -51,7 +51,7 @@ const GoalItem: React.FC<GoalItemProps> = ({
       className={`group relative overflow-hidden rounded-3xl transition-all duration-500
         ${
           goal.is_completed
-            ? "bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 border-2 border-emerald-200"
+            ? "bg-gradient-to-br from-emerald-500 via-teal-400 to-cyan-500 border-2 border-emerald-200"
             : "bg-white border-2 border-slate-200"
         }
         hover:shadow-2xl hover:scale-[1.02] transform

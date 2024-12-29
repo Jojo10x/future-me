@@ -94,3 +94,9 @@ loader logo  */
 .animate-expand {
   animation: expand 2s infinite;
 }
+
+.green_bg {
+  --tw-bg-opacity: 1;
+  background-color: rgb(3 30 30 / var(--tw-bg-opacity));
+}
+
