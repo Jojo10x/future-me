@@ -6,12 +6,11 @@ import dj_database_url
 
 PORT = os.environ.get('PORT', '8000')
 config = Config()
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-y&yfefj(!@f(fq%1_&*7n@lbf5u(#0z1wmin06at4da^zc))c5'
 
-DEBUG = True
+DEBUG = True 
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
@@ -25,15 +24,16 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
 ]
+
 CORS_ALLOWED_ORIGINS = [
     'https://futuremee.vercel.app',
-    'http://localhost:3000'
+    'http://localhost:3000',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://futuremee.vercel.app',
     'http://localhost:3000',
-    'https://future-me.onrender.com'
+    'https://future-me.onrender.com',
 ]
 
 INSTALLED_APPS = [
@@ -62,12 +62,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 CORS_ALLOW_CREDENTIALS = True  
-CORS_ALLOW_ALL_HEADERS = True
-DEBUG = True 
 
-# Add CORS allowed headers
+# CORS allowed headers
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -80,7 +77,7 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# Add CORS allowed methods
+# CORS allowed methods
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -98,14 +95,13 @@ AUTHENTICATION_BACKENDS = [
 # Session and CSRF settings
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
-
+SESSION_COOKIE_SECURE = True  # Set to True for production
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = False
-CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
+CSRF_COOKIE_SECURE = True  # Set to True for production
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
-# Rest Framework settings (combine the duplicate entries)
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
