@@ -24,6 +24,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, []);
 
+  const API_URI = "https://future-me.onrender.com/api/";
+
   const checkAuth = async () => {
     try {
       const token = localStorage.getItem('access_token');
@@ -33,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      const response = await fetch('http://localhost:8000/api/profile/', {
+      const response = await fetch(`${API_URI}profile/`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -66,7 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     try {
-      const response = await fetch('http://localhost:8000/api/login/', {
+      const response = await fetch(`${API_URI}login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +100,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const register = async (credentials: RegisterCredentials): Promise<boolean> => {
     try {
-      const response = await fetch('http://localhost:8000/api/register/', {
+      const response = await fetch(`${API_URI}register/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

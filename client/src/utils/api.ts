@@ -1,11 +1,12 @@
 import { User } from "@/types/user";
 
 export const getUser = async (): Promise<User | null> => {
+  const API_URI = "https://future-me.onrender.com/api/";
   try {
     const token = localStorage.getItem("access_token");
     if (!token) throw new Error("No access token found");
 
-    const response = await fetch("http://localhost:8000/api/profile/", {
+    const response = await fetch(`${API_URI}profile/`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -28,10 +29,11 @@ export const updateUser = async (userData: {
   full_name?: string;
   email?: string;
 }): Promise<User> => {
+  const API_URI = "https://future-me.onrender.com/api/";
   const token = localStorage.getItem("access_token");
   if (!token) throw new Error("No access token found");
 
-  const response = await fetch("http://localhost:8000/api/profile/", {
+  const response = await fetch(`${API_URI}profile/`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,

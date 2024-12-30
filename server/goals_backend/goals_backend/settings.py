@@ -1,6 +1,9 @@
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
+import logging
+logging.basicConfig(level=logging.DEBUG)
+logging.getLogger('django.db.backends').setLevel(logging.DEBUG)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -12,7 +15,12 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'futuremee.vercel.app'
+    'https://future-me.onrender.com'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -46,6 +54,7 @@ MIDDLEWARE = [
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'https://futuremee.vercel.app'
 ]
 CORS_ALLOW_CREDENTIALS = True  # Add this for credentials support
 
@@ -87,7 +96,7 @@ CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'https://future-me-jojo10xs-projects.vercel.app/', 'https://futuremee.vercel.app']
 
 # Rest Framework settings (combine the duplicate entries)
 REST_FRAMEWORK = {
@@ -119,12 +128,62 @@ WSGI_APPLICATION = 'goals_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
+        'NAME': 'neondb',
+        'USER': 'neondb_owner',
+        'PASSWORD': 'DC1lkGB6gxLQ',
+        'HOST': 'ep-black-boat-a40oh2q9-pooler.us-east-1.aws.neon.tech',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+            'sslrootcert': '/path/to/root/ca_cert.pem',  
+        },
     }
+}
+
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'level': 'DEBUG',
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'DEBUG',
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
 }
 
 AUTH_PASSWORD_VALIDATORS = [
