@@ -11,8 +11,8 @@ SECRET_KEY = 'django-insecure-y&yfefj(!@f(fq%1_&*7n@lbf5u(#0z1wmin06at4da^zc))c5
 
 DEBUG = True
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),  
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30), 
 }
 
 ALLOWED_HOSTS = [
@@ -49,15 +49,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Remove CORS_ALLOW_ALL_ORIGINS as it conflicts with credentials
-# CORS_ALLOW_ALL_ORIGINS = True  # Remove this line
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'https://futuremee.vercel.app'
 ]
-CORS_ALLOW_CREDENTIALS = True  # Add this for credentials support
+CORS_ALLOW_CREDENTIALS = True 
 
 # Add CORS allowed headers
 CORS_ALLOW_HEADERS = [
@@ -90,11 +88,11 @@ AUTHENTICATION_BACKENDS = [
 # Session and CSRF settings
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_SECURE = False  
 
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = False
-CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
+CSRF_COOKIE_SECURE = False  
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'https://future-me-jojo10xs-projects.vercel.app/', 'https://futuremee.vercel.app']
