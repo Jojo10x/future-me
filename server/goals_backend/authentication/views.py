@@ -2,6 +2,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, RegisterSerializer
 
 import logging
@@ -9,14 +11,23 @@ import logging
 logger = logging.getLogger(__name__)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def register(request):
     logger.info(f"Request data: {request.data}")
-    serializer = RegisterSerializer(data=request.data)
+    data = request.data.copy()
+    if 'full_name' in data:
+        data['fullName'] = data.pop('full_name')
+    
+    serializer = RegisterSerializer(data=data)
     if serializer.is_valid():
         user = serializer.save()
+        # Create token for the new user
+        token, _ = Token.objects.get_or_create(user=user)
+        
         logger.info(f"User created: {user}")
         return Response({
             "user": UserSerializer(user).data,
+            "token": token.key,
             "message": "User Created Successfully"
         }, status=status.HTTP_201_CREATED)
     logger.error(f"Validation errors: {serializer.errors}")
