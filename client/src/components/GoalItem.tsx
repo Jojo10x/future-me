@@ -48,8 +48,6 @@ const GoalItem: React.FC<GoalItemProps> = ({
   const completedDate = goal.completed_at ? goal.completed_at.split("T")[0] : null;
 
 
-  console.log('completed date:', completedDate)
-
   return (
     <div
       className={`group relative overflow-hidden rounded-3xl transition-all duration-500

@@ -11,7 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'email', 'full_name')
         read_only_fields = ('id',)
     def update(self, instance, validated_data):
-        # Update the user instance
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
@@ -24,7 +23,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         validators=[validate_password],
         style={'input_type': 'password'}
     )
-    
+
     class Meta:
         model = User
         fields = ('email', 'password', 'full_name')

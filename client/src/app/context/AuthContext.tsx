@@ -19,7 +19,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading: true,
   });
   const router = useRouter();
-  const API = 'https://future-me.onrender.com';
 
   useEffect(() => {
     checkAuth();
@@ -30,15 +29,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const token = localStorage.getItem('access_token');
       if (!token) {
         setState({ user: null, loading: false });
+        router.push('/login');
         return;
       }
 
-      const response = await fetch(`${API}/api/profile/`, {
+      const response = await fetch('http://localhost:8000/api/profile/', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        mode: 'cors', 
+        credentials: 'include', // Include cookies if using CSRF
       });
 
       if (response.ok) {
@@ -55,35 +55,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         setState({ user: null, loading: false });
+        router.push('/login');
       }
     } catch (error) {
       console.error('Auth check failed:', error);
       setState({ user: null, loading: false });
+      router.push('/login');
     }
   };
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     try {
-      const response = await fetch(`${API}/api/login/`, {
+      const response = await fetch('http://localhost:8000/api/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           email: credentials.email,
           password: credentials.password
         }),
-        mode: 'cors', 
       });
 
       if (response.ok) {
-        const tokens: AuthTokens = await response.json();
-        localStorage.setItem('access_token', tokens.access);
-        localStorage.setItem('refresh_token', tokens.refresh);
-        await checkAuth();
+        const data: AuthTokens = await response.json();
         router.push('/');
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
+        await checkAuth();
         return true;
       }
+      
+      const errorData = await response.json();
+      console.error('Login failed:', errorData);
       return false;
     } catch (error) {
       console.error('Login failed:', error);
@@ -93,28 +98,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const register = async (credentials: RegisterCredentials): Promise<boolean> => {
     try {
-      const response = await fetch(`${API}/api/register/`, {
+      const response = await fetch('http://localhost:8000/api/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           email: credentials.email,
           password: credentials.password,
           full_name: credentials.fullName 
         }),
-        mode: 'cors', 
       });
-
+  
       if (response.ok) {
-        const userData: User = await response.json();
-        console.log('Registered user:', userData);
+        const data = await response.json();
+        console.log('Registration successful:', data);
         router.push('/login');
         return true;
       }
+      
+      const errorData = await response.json();
+      console.error('Registration failed:', errorData);
       return false;
     } catch (error) {
-      console.error('Registration failed:', error);
+      console.error('Registration request failed:', error);
       return false;
     }
   };

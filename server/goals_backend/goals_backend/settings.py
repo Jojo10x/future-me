@@ -1,30 +1,18 @@
 from pathlib import Path
 from decouple import config
-import os
-import dj_database_url
-
-PORT = os.environ.get('PORT', '8000')
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-y&yfefj(!@f(fq%1_&*7n@lbf5u(#0z1wmin06at4da^zc))c5'
 
 DEBUG = True
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
 
-ALLOWED_HOSTS = [
-    'future-me.onrender.com',
-    'localhost',
-    '127.0.0.1',
-]
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'https://futuremee.vercel.app'
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    'https://futuremee.vercel.app',  
-    'http://localhost:3000',
-]
+ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -38,12 +26,12 @@ INSTALLED_APPS = [
     'authentication', 
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt', 
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Must be at the top
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,7 +40,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Remove CORS_ALLOW_ALL_ORIGINS as it conflicts with credentials
+# CORS_ALLOW_ALL_ORIGINS = True  # Remove this line
 
+# CORS Configuration
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]
 CORS_ALLOW_CREDENTIALS = True  # Add this for credentials support
 
 # Add CORS allowed headers
@@ -95,16 +89,13 @@ CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
+# Rest Framework settings (combine the duplicate entries)
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
+     'DEFAULT_PERMISSION_CLASSES': [],
 }
-
 ROOT_URLCONF = 'goals_backend.urls'
 
 TEMPLATES = [
@@ -125,29 +116,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'goals_backend.wsgi.application'
 
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
-# Update database configuration for Render
-if 'DATABASE_URL' in os.environ:
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=os.environ.get('DATABASE_URL'),
-            engine='django.db.backends.postgresql'
-        )
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config('DB_NAME'), 
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST'),
-            'PORT': config('DB_PORT'),
-        }
-    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -170,7 +148,6 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

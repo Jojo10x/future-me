@@ -2,41 +2,28 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import AllowAny
-from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, RegisterSerializer
+from rest_framework.permissions import AllowAny
 
 import logging
 
 logger = logging.getLogger(__name__)
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([AllowAny])  # Make sure this is imported and applied
 def register(request):
-    logger.info(f"Request data: {request.data}")
-    data = request.data.copy()
-    if 'full_name' in data:
-        data['fullName'] = data.pop('full_name')
-    
-    serializer = RegisterSerializer(data=data)
+    print(request.data)  # Add this to debug the incoming data
+    serializer = RegisterSerializer(data=request.data)
     if serializer.is_valid():
-        user = serializer.save()
-        # Create token for the new user
-        token, _ = Token.objects.get_or_create(user=user)
-        
-        logger.info(f"User created: {user}")
-        return Response({
-            "user": UserSerializer(user).data,
-            "token": token.key,
-            "message": "User Created Successfully"
-        }, status=status.HTTP_201_CREATED)
-    logger.error(f"Validation errors: {serializer.errors}")
+        serializer.save()
+        return Response({"message": "Success"}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT'])  
 @permission_classes([IsAuthenticated])
 def get_user_profile(request):
+
     user = request.user
     
     if request.method == 'GET':

@@ -68,19 +68,21 @@ export default function AuthForm() {
           password: credentials.password,
           fullName: credentials.fullName,
         };
-        success = await register(registerData);
+        const success = await register(registerData);
         if (success) {
-          
-          const loginData: LoginCredentials = {
-            email: credentials.email,
-            password: credentials.password,
-          };
-          await login(loginData);
+          // Instead of auto-login, redirect to login page
+          setIsLogin(true);
+          setCredentials(prev => ({
+            ...prev,
+            password: '' // Clear password for security
+          }));
+          // Optional: Show success message
+          setError('Registration successful! Please login.');
         } else {
           setError('Registration failed. Please try again.');
         }
       }
-    } catch (err) {
+    }catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
       console.error(err);
     } finally {
