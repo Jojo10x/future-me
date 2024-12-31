@@ -45,7 +45,7 @@ const GoalItem: React.FC<GoalItemProps> = ({
 
   const createdDate = goal.created_at.split("T")[0];
   const updatedDate = goal.updated_at.split("T")[0];
-  const completedDate = goal.completed_at ? goal.completed_at.split("T")[0] : null;
+  const completedDate = goal.completed_at ? goal.completed_at.split("T")[0] : "";
 
 
   return (
