@@ -101,7 +101,7 @@ const EditableProfileCard = ({ user, onSave }: EditableProfileCardProps) => {
             ) : (
               <>
                 <h2 className="text-xl font-semibold text-gray-900">
-                  {user?.full_name || "Loading..."}
+                  {user?.full_name || <div className="w-6 h-6 border-2 border-emerald-700 border-t-transparent rounded-full animate-spin" />}
                 </h2>
                 <p className="text-sm text-gray-500">{user?.email}</p>
               </>
