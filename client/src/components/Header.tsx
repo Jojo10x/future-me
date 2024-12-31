@@ -11,8 +11,8 @@ type HeaderProps = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ goals, onAddGoal }) => (
-  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-    <div className="flex flex-row justify-between items-center w-full sm:w-auto">
+  <div className="flex flex-col gap-4 mb-8">
+    <div className="flex items-center justify-between w-full">
       <Image
         width={100}
         height={100}
@@ -20,15 +20,11 @@ export const Header: React.FC<HeaderProps> = ({ goals, onAddGoal }) => (
         alt="PixelTochka Logo"
         className="ml-2"
       />
-      <div className="flex space-x-4 sm:hidden">
+      <div className="flex items-center space-x-4">
         <AddGoalButton onClick={onAddGoal} />
         <ProfileBtn />
       </div>
     </div>
     <ProgressTracker goals={goals} />
-    <div className="hidden sm:flex space-x-4">
-      <AddGoalButton onClick={onAddGoal} />
-      <ProfileBtn />
-    </div>
   </div>
 );
