@@ -1,7 +1,14 @@
 ## FUTURE ME 
-for testing purposes
-email : testing@gmail.com
-password : test1000
+For testing purposes, you can use the following credentials:
+
+- **Email:** `testing@gmail.com`
+- **Password:** `test1000`
+
+## Built With
+- **Next.js**
+- **Django**
+- **PostgreSQL**
+- **Tailwind CSS**
 
 ## Login 
 ![Screenshot 2024-12-31 at 10 38 47 PM](https://github.com/user-attachments/assets/80eb0955-98a5-4305-bb67-e104276351f0)
