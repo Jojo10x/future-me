@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Include cookies if using CSRF
+        credentials: 'include', 
       });
 
       if (response.ok) {
@@ -53,6 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }, 
           loading: false 
         });
+        router.push('/')
       } else {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
@@ -82,7 +83,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (response.ok) {
         const data: AuthTokens = await response.json();
-        router.push('/');
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
         await checkAuth();
