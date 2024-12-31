@@ -8,13 +8,11 @@ type AddGoalButtonProps = {
 
 export const AddGoalButton: React.FC<AddGoalButtonProps> = ({ onClick }) => {
   const [isLoading, setIsLoading] = useState(false);
-  
 
   const handleClick = async () => {
     setIsLoading(true);
     try {
       await onClick();
-     
     } finally {
       setIsLoading(false);
     }
@@ -28,8 +26,10 @@ export const AddGoalButton: React.FC<AddGoalButtonProps> = ({ onClick }) => {
         group
         relative
         p-3
+        bg-emerald-600
         dark:bg-gray-800
         hover:bg-emerald-700
+        dark:hover:bg-emerald-700
         rounded-full
         transition-all 
         duration-200
