@@ -271,7 +271,7 @@ export function useGoals() {
       );
 
       const response = await fetch(
-        `${API_URI}goals/${goalId}/subtasks/`,
+        `${API_URI}goals/${goalId}/`,
         {
           method: "PATCH",
           headers: {
