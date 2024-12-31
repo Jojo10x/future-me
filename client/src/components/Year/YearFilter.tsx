@@ -1,5 +1,5 @@
 import React from "react";
-import { YearButton } from "./YearButton";
+import { YearButton } from "../Buttons/YearButton";
 import { Goal } from "@/types/types";
 
 type YearFilterProps = {

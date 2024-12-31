@@ -1,9 +1,9 @@
 import { Goal } from "@/types/types";
-import { AddGoalButton } from "./AddGoalButton";
-import ProgressTracker from "./ProgressTracker";
+import { AddGoalButton } from "./Buttons/AddGoalButton";
+import ProgressTracker from "./ProgressTracker/ProgressTracker";
 import logo from "../../public/logo--text----future-me.svg";
 import Image from "next/image";
-import { ProfileBtn } from "./ProfileBtn";
+import { ProfileBtn } from "./Buttons/ProfileBtn";
 
 type HeaderProps = {
   goals: Goal[];

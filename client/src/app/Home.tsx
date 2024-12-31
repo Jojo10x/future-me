@@ -1,9 +1,9 @@
 "use client";
 import { Header } from "@/components/Header";
-import { YearFilter } from "@/components/YearFilter";
-import { GoalForm } from "@/components/GoalForm";
+import { YearFilter } from "@/components/Year/YearFilter";
+import { GoalForm } from "@/components/Forms/GoalForm";
 import SnackbarMessage from "@/components/SnackbarMessage";
-import GoalList from "@/components/GoalList";
+import GoalList from "@/components/Goals/GoalList";
 import { useGoals } from "@/hooks/useGoals";
 import Footer from "@/components/Footer";
 import ProtectedRoute from "@/components/ProtectedRoute";

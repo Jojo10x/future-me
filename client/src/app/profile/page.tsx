@@ -10,8 +10,8 @@ import { getUser, updateUser } from "@/utils/api";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
 import { useGoals } from "@/hooks/useGoals";
-import GoalDashboard from "@/components/GoalDashboard";
-import EditableProfileCard from "@/components/EditableProfileCard";
+import GoalDashboard from "@/components/ProfileViews/GoalDashboard";
+import EditableProfileCard from "@/components/Profile/EditableProfileCard";
 interface ExtendedUser extends User {
   goals: Goal[];
 }

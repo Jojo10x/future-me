@@ -4,13 +4,13 @@ import {
   Goal,
   NewGoal,
 } from "@/types/types";
-import { Modal } from "./Modal";
-import { SubtaskLists } from "./SubtaskLists";
-import { DescriptionInput } from "./DescriptionInput";
-import { FormAction } from "./FormAction";
-import { GoalTitleInput } from "./GoalTitleInput";
-import { GoalTypeSelector } from "./GoalTypeSelector";
-import { YearInput } from "./YearInput";
+import { Modal } from "@/components/Modal/Modal";
+import { SubtaskLists } from "@/components/SubTask/SubtaskLists";
+import { DescriptionInput } from "@/components/Forms/DescriptionInput";
+import { FormAction } from "@/components/Forms/FormAction";
+import { GoalTitleInput } from "@/components/Goals/GoalTitleInput";
+import { GoalTypeSelector } from "@/components/Goals/GoalTypeSelector";
+import { YearInput } from "@/components/Year/YearInput";
 
 type GoalFormProps = EditingGoalFormProps | CreatingGoalFormProps;
 

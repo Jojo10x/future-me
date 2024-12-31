@@ -14,7 +14,7 @@ import {
   Cell
 } from "recharts";
 import { useMemo } from "react";
-import { YearFilter } from "./YearFilter";
+import { YearFilter } from "@/components/Year/YearFilter";
 
 export const GraphsView = ({ goals }: { goals: Goal[] }) => {
   const [filterYear, setFilterYear] = React.useState<number | string>("");

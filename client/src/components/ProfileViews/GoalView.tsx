@@ -1,6 +1,6 @@
 import { Goal } from "@/types/types";
 import { useState, useMemo } from "react";
-import { YearFilter } from "./YearFilter";
+import { YearFilter } from "../Year/YearFilter";
 
 export const GoalView = ({ goals }: { goals: Goal[] }) => {
   const [filterYear, setFilterYear] = useState<number | string>("");

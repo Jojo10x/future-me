@@ -1,4 +1,4 @@
-import GoalItem from '@/components/GoalItem';
+import GoalItem from '@/components/Goals/GoalItem';
 import { Goal } from '@/types/types';
 
 interface GoalListProps {

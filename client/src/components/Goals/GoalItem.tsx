@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CheckCircle, ChevronDown, Trophy } from "lucide-react";
 import { Goal } from "@/types/types";
-import { SubTaskList } from "./SubTaskList";
+import { SubTaskList } from "@/components/SubTask/SubTaskList";
 import { Undo2, Pencil, Trash2 } from 'lucide-react';
 
 interface GoalItemProps {
