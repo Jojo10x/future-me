@@ -104,12 +104,14 @@ export default function AuthForm() {
       <div className="max-w-md w-full transform transition-all duration-300 ease-in-out">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header Section */}
-          <div className="relative h-32 bg-lime-600 p-8">
-            <h2 className="text-3xl font-bold text-white text-center">
-              {isLogin ? 'Welcome Back' : 'Create Account'}
+          <div className="relative h-32 bg-gradient-to-br from-emerald-500 via-teal-400 to-cyan-500 border-2 border-emerald-200 p-8 rounded-lg shadow-lg">
+            <h2 className="text-4xl font-bold text-white text-center tracking-wide antialiased drop-shadow-sm">
+              {isLogin ? "Welcome Back" : "Create Account"}
             </h2>
-            <p className="text-blue-100 text-center mt-2">
-              {isLogin ? 'Sign in to your account' : 'Start your journey with us'}
+            <p className="text-back text-center mt-2 font-medium tracking-wide antialiased opacity-90">
+              {isLogin
+                ? "Sign in to your account"
+                : "Start your journey with us"}
             </p>
           </div>
 
@@ -160,7 +162,7 @@ export default function AuthForm() {
                 </div>
                 <input
                   id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   required
                   placeholder="Password"
                   className="block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
@@ -189,7 +191,10 @@ export default function AuthForm() {
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                  <label
+                    htmlFor="remember-me"
+                    className="ml-2 block text-sm text-gray-700"
+                  >
                     Remember me
                   </label>
                 </div>
@@ -198,12 +203,14 @@ export default function AuthForm() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-lime-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-3 px-4 border-transparent rounded-lg shadow-sm text-xl font-bold text-white bg-gradient-to-br from-emerald-500 via-teal-400 to-cyan-500 border-2 border-emerald-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-sans tracking-wide antialiased hover:shadow-lg"
               >
                 {isLoading ? (
                   <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  isLogin ? 'Sign in' : 'Create account'
+                  <span className="drop-shadow-sm">
+                    {isLogin ? "Sign in" : "Create account"}
+                  </span>
                 )}
               </button>
             </form>
@@ -215,7 +222,9 @@ export default function AuthForm() {
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="px-4 bg-white text-sm text-gray-500">or</span>
+                  <span className="px-4 bg-white text-sm text-gray-500">
+                    or
+                  </span>
                 </div>
               </div>
 
@@ -223,7 +232,9 @@ export default function AuthForm() {
                 onClick={() => setIsLogin(!isLogin)}
                 className="mt-6 text-sm text-blue-600 hover:text-blue-500 font-medium transition-colors duration-200"
               >
-                {isLogin ? "Don't have an account? Register here" : "Already have an account? Sign in"}
+                {isLogin
+                  ? "Don't have an account? Register here"
+                  : "Already have an account? Sign in"}
               </button>
             </div>
           </div>
