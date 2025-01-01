@@ -136,8 +136,8 @@ DATABASES = {
         'HOST': os.getenv('DATABASE_HOST'),
         'PORT': os.getenv('DATABASE_PORT'),
         'OPTIONS': {
-            'sslmode': os.getenv('DATABASE_SSLMODE'),
-            'sslrootcert': os.getenv('DATABASE_SSLROOTCERT'),
+             'sslmode': 'require',
+            'sslrootcert': '/path/to/root/ca_cert.pem', 
         },
     }
 }
