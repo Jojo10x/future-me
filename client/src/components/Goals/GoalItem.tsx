@@ -3,6 +3,7 @@ import { CheckCircle, ChevronDown, Trophy } from "lucide-react";
 import { Goal } from "@/types/types";
 import { SubTaskList } from "@/components/SubTask/SubTaskList";
 import { Undo2, Pencil, Trash2 } from 'lucide-react';
+import ConfirmDialog from "./ConfirmDialog";
 
 interface GoalItemProps {
   goal: Goal;
@@ -22,6 +23,7 @@ const GoalItem: React.FC<GoalItemProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [showCompletionEffect, setShowCompletionEffect] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleComplete = async () => {
     try {
@@ -41,6 +43,15 @@ const GoalItem: React.FC<GoalItemProps> = ({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleDelete = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = () => {
+    onDelete();
+    setShowDeleteConfirm(false);
   };
 
   const createdDate = goal.created_at.split("T")[0];
@@ -171,7 +182,7 @@ const GoalItem: React.FC<GoalItemProps> = ({
           </button>
 
           <button
-            onClick={onDelete}
+            onClick={handleDelete}
             disabled={isLoading}
             className="p-2 text-gray-600 transition-all duration-300 hover:scale-125 disabled:opacity-50 hover:text-red-100"
             aria-label="Delete"
@@ -183,6 +194,11 @@ const GoalItem: React.FC<GoalItemProps> = ({
           </button>
         </div>
       </div>
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 };
