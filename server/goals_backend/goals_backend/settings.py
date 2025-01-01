@@ -124,15 +124,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'goals_backend.wsgi.application'
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'neondb',
-        'USER': 'neondb_owner',
-        'PASSWORD': 'DC1lkGB6gxLQ',
-        'HOST': 'ep-black-boat-a40oh2q9-pooler.us-east-1.aws.neon.tech',
-        'PORT': '5432',
-        'OPTIONS': {
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config('DATABASE_HOST'),
+        'PORT': config('DATABASE_PORT', default='5432'),
+         'OPTIONS': {
             'sslmode': 'require',
             'sslrootcert': '/path/to/root/ca_cert.pem',  
         },
