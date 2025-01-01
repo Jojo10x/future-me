@@ -10,6 +10,7 @@ const Loader = () => {
         src={logo}
         alt="Future ME Logo"
         className="object-contain"
+        priority
       />
       <div className="relative w-3/4 mt-4">
         <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 w-[100px] h-[2px] bg-black animate-expand"></div>
