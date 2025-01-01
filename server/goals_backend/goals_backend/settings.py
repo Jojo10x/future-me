@@ -1,14 +1,11 @@
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
-from dotenv import load_dotenv
-import os
 import logging
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('django.db.backends').setLevel(logging.DEBUG)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv() 
 
 SECRET_KEY = 'django-insecure-y&yfefj(!@f(fq%1_&*7n@lbf5u(#0z1wmin06at4da^zc))c5'
 
@@ -130,18 +127,17 @@ WSGI_APPLICATION = 'goals_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DATABASE_NAME'),
-        'USER': os.getenv('DATABASE_USER'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': os.getenv('DATABASE_HOST'),
-        'PORT': os.getenv('DATABASE_PORT'),
+        'NAME': 'neondb',
+        'USER': 'neondb_owner',
+        'PASSWORD': 'DC1lkGB6gxLQ',
+        'HOST': 'ep-black-boat-a40oh2q9-pooler.us-east-1.aws.neon.tech',
+        'PORT': '5432',
         'OPTIONS': {
-             'sslmode': 'require',
-            'sslrootcert': '/path/to/root/ca_cert.pem', 
+            'sslmode': 'require',
+            'sslrootcert': '/path/to/root/ca_cert.pem',  
         },
     }
 }
-
 
 
 
