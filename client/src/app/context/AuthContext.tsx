@@ -109,6 +109,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
 
         sessionStorage.setItem('userData', JSON.stringify(userData));
+        
+        if (window.location.pathname === '/login') {
+          router.push('/');
+        }
       } else {
         throw new Error('Profile fetch failed');
       }
@@ -205,6 +209,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    sessionStorage.removeItem('userData');
     setState({ user: null, loading: false });
     router.push('/login');
   };
