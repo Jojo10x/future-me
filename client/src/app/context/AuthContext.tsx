@@ -12,6 +12,25 @@ import {
 } from '@/types/auth';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const API_URI = "https://future-me.onrender.com/api/";
+const TIMEOUT_MS = 8000; // 8 seconds 
+
+const fetchWithTimeout = async (url: string, options: RequestInit) => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    return response;
+  } catch (error) {
+    clearTimeout(timeout);
+    throw error;
+  }
+};
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AuthState>({
@@ -20,28 +39,63 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
   const router = useRouter();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  const refreshToken = async (): Promise<string | null> => {
+    try {
+      const refresh = localStorage.getItem('refresh_token');
+      if (!refresh) throw new Error('No refresh token');
 
-  const API_URI = "https://future-me.onrender.com/api/";
+      const response = await fetchWithTimeout(`${API_URI}token/refresh/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refresh }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('access_token', data.access);
+        return data.access;
+      }
+      throw new Error('Failed to refresh token');
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+      return null;
+    }
+  };
 
   const checkAuth = async () => {
     try {
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        setState({ user: null, loading: false });
+      const initialToken = localStorage.getItem('access_token');
+    
+    if (!initialToken) {
+      setState({ user: null, loading: false });
+      if (window.location.pathname !== '/login') {
         router.push('/login');
-        return;
       }
+      return;
+    }
 
-      const response = await fetch(`${API_URI}profile/`, {
+    const fetchProfile = async (authToken: string) => {
+      return fetchWithTimeout(`${API_URI}profile/`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${authToken}`,
           'Content-Type': 'application/json',
         },
-        credentials: 'include', 
+        credentials: 'include',
       });
+    };
+
+    let response = await fetchProfile(initialToken);
+
+      if (response.status === 401) {
+        const newToken = await refreshToken();
+        if (newToken) {
+          response = await fetchProfile(newToken);
+        } else {
+          throw new Error('Authentication failed');
+        }
+      }
 
       if (response.ok) {
         const userData: User = await response.json();
@@ -53,19 +107,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }, 
           loading: false 
         });
-        router.push('/')
+
+        sessionStorage.setItem('userData', JSON.stringify(userData));
       } else {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        setState({ user: null, loading: false });
-        router.push('/login');
+        throw new Error('Profile fetch failed');
       }
     } catch (error) {
       console.error('Auth check failed:', error);
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      sessionStorage.removeItem('userData');
       setState({ user: null, loading: false });
-      router.push('/login');
+      if (window.location.pathname !== '/login') {
+        router.push('/login');
+      }
     }
   };
+
+  useEffect(() => {
+    const cachedUserData = sessionStorage.getItem('userData');
+    if (cachedUserData) {
+      const userData = JSON.parse(cachedUserData);
+      setState({ 
+        user: {
+          id: userData.id,
+          email: userData.email,
+          fullName: userData.fullName
+        }, 
+        loading: false 
+      });
+    }
+    checkAuth();
+  }, []);
 
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     try {
