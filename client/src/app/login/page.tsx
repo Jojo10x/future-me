@@ -212,7 +212,7 @@ export default function AuthForm() {
                 {isLoading ? (
                   <>
                     <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin mb-1" />
-                    <span className="text-sm font-normal">
+                    <span className="text-sm font-normal ml-1">
                       {loadingState === "authenticating"
                         ? "Authenticating..."
                         : "Processing..."}
