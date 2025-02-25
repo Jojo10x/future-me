@@ -13,7 +13,7 @@ import {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const API_URI = "https://future-me.onrender.com/api/";
-const TIMEOUT_MS = 8000; // 8 seconds 
+const TIMEOUT_MS = 15000; 
 
 const fetchWithTimeout = async (url: string, options: RequestInit) => {
   const controller = new AbortController();

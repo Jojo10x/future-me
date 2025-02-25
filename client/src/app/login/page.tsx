@@ -9,6 +9,7 @@ export default function AuthForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [loadingState, setLoadingState] = useState<'idle' | 'authenticating' | 'processing'>('idle');
   const [credentials, setCredentials] = useState<LoginCredentials & RegisterCredentials>({
     email: '',
     password: '',
@@ -45,6 +46,7 @@ export default function AuthForm() {
     try {
       let success;
       if (isLogin) {
+        setLoadingState('authenticating');
         const loginData: LoginCredentials = {
           email: credentials.email,
           password: credentials.password,
@@ -63,6 +65,7 @@ export default function AuthForm() {
           setError('Invalid email or password');
         
       } else {
+        setLoadingState('processing');
         const registerData: RegisterCredentials = {
           email: credentials.email,
           password: credentials.password,
@@ -87,6 +90,7 @@ export default function AuthForm() {
       console.error(err);
     } finally {
       setIsLoading(false);
+      setLoadingState('idle');
     }
   };
 
@@ -206,7 +210,14 @@ export default function AuthForm() {
                 className="w-full flex justify-center py-3 px-4 border-transparent rounded-lg shadow-sm text-xl font-bold text-white bg-gradient-to-br from-emerald-500 via-teal-400 to-cyan-500 border-2 border-emerald-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-sans tracking-wide antialiased hover:shadow-lg"
               >
                 {isLoading ? (
-                  <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <>
+                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin mb-1" />
+                    <span className="text-sm font-normal">
+                      {loadingState === "authenticating"
+                        ? "Authenticating..."
+                        : "Processing..."}
+                    </span>
+                  </>
                 ) : (
                   <span className="drop-shadow-sm">
                     {isLogin ? "Sign in" : "Create account"}
