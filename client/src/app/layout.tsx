@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
 import Loader from "@/components/Loader";
 import { Suspense } from "react";
 import { AuthProvider } from "./context/AuthContext";
-import Head from "next/head";
+import PWAProvider from '@/components/PWAProvider';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -17,8 +17,31 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "Future Me",
-  description: "Your Path to a Better Future Starts Here.",
+  title: "Future Me - Your Path to a Better Future",
+  description: "Your Path to a Better Future Starts Here",
+  manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/icons/android/android-launchericon-192-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/android/android-launchericon-512-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icons/ios/180.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  appleWebApp: {
+    capable: true,
+    title: "Future Me",
+    statusBarStyle: "default",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -28,15 +51,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        <link rel="icon" href="client/public/logo--text----future-me.svg" />
-      </Head>
       <body
-        className={`${inter.variable} ${firaCode.variable} antialiased bg-gray-50 `}
+        className={`${inter.variable} ${firaCode.variable} antialiased bg-gray-50`}
       >
-        <Suspense fallback={<Loader />}>
-          <AuthProvider>{children}</AuthProvider>
-        </Suspense>
+        <PWAProvider>
+          <Suspense fallback={<Loader />}>
+            <AuthProvider>{children}</AuthProvider>
+          </Suspense>
+        </PWAProvider>
       </body>
     </html>
   );
