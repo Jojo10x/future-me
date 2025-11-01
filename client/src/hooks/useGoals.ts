@@ -22,22 +22,7 @@ export function useGoals() {
 
   useEffect(() => {
     fetchGoals();
-  }, []);
-
-  // const fetchGoals = async () => {
-  //   try {
-  //     const token = localStorage.getItem('access_token');
-  //   if (!token) throw new Error('No access token found');
-  //     let url = 'http://localhost:8000/api/goals/';
-  //     if (filterYear) url += `?year=${filterYear}`;
-  //     const response = await fetch(url);
-  //     if (!response.ok) throw new Error('Failed to fetch goals');
-  //     const data = await response.json();
-  //     setGoals(data);
-  //   } catch (error) {
-  //     console.error('Error fetching goals:', error);
-  //   }
-  // };
+  }, [filterYear]);
 
   const API_URI = "https://future-me.onrender.com/api/";
   const fetchGoals = async () => {
@@ -45,7 +30,6 @@ export function useGoals() {
       setIsLoading(true);
       const token = localStorage.getItem('access_token');
       if (!token) throw new Error('No access token found');
-
       const allGoalsResponse = await fetch(`${API_URI}goals/`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -53,30 +37,21 @@ export function useGoals() {
         }
       });
 
-      if (allGoalsResponse.ok) {
-        const allData = await allGoalsResponse.json();
-        setAllGoals(allData); 
+      if (!allGoalsResponse.ok) throw new Error('Failed to fetch goals');
+
+      const allData = await allGoalsResponse.json();
+      setAllGoals(allData);
+      if (filterYear && filterYear !== "") {
+        const filteredData = allData.filter((goal: Goal) => goal.year === filterYear);
+        setGoals(filteredData);
+      } else {
+        setGoals(allData);
       }
-
-      let url = `${API_URI}goals/`;
-      if (filterYear) url += `?year=${filterYear}`;
-
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) throw new Error('Failed to fetch goals');
-      const data = await response.json();
-      setAllGoals(data);
-      setGoals(data);
     } catch (error) {
       console.error('Error fetching goals:', error);
     } finally {
-    setIsLoading(false);
-  }
+      setIsLoading(false);
+    }
   };
 
 
