@@ -1,14 +1,15 @@
 import { Goal } from "@/types/types";
-import { ListTodo, BarChart, Calendar, Clock, Flame } from "lucide-react";
+import { ListTodo, BarChart, Calendar, Clock, Flame, Lightbulb } from "lucide-react";
 import { useState } from "react";
 import  YearComparison from "./YearComparison ";
 import { GraphsView } from "./GraphsView";
 import { GoalView } from "./GoalView";
 import GoalTimeAnalytics from "./GoalTimeAnalytics";
 import GoalStreaksView from "./GoalStreaksView";
+import GoalInsightsView from "./GoalInsightsView";
 
 const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
-  const [activeView, setActiveView] = useState<"goals" | "graphs" | "data" | "time" | "streaks">(
+  const [activeView, setActiveView] = useState<"goals" | "graphs" | "data" | "time" | "streaks" | "insights">(
   "goals"
 );
 
@@ -52,18 +53,17 @@ const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
             <Calendar className="h-4 w-4" />
             Year
           </button>
-          <button
-            onClick={() => setActiveView("time")}
+                    <button
+            onClick={() => setActiveView("insights")}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
-                ${
-                  activeView === "time"
-                    ? "bg-gray-900 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+      ${activeView === "insights"
+                ? "bg-gray-900 text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
           >
-            <Clock className="h-4 w-4" />
-            Time
-          </button> 
+            <Lightbulb className="h-4 w-4" />
+            Insights
+          </button>
           <button
             onClick={() => setActiveView("streaks")}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
@@ -75,6 +75,18 @@ const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
             <Flame className="h-4 w-4" />
             Streaks
           </button>
+                    <button
+            onClick={() => setActiveView("time")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
+                ${
+                  activeView === "time"
+                    ? "bg-gray-900 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+          >
+            <Clock className="h-4 w-4" />
+            Time
+          </button> 
         </div>
 
         {activeView === "goals" && <GoalView goals={goals} />}
@@ -82,6 +94,7 @@ const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
         {activeView === "data" && <YearComparison  goals={goals} />}
         {activeView === "time" && <GoalTimeAnalytics goals={goals} />}
         {activeView === "streaks" && <GoalStreaksView goals={goals} />}
+        {activeView === "insights" && <GoalInsightsView goals={goals} />}
         
       </div>
     </div>
