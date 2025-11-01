@@ -21,7 +21,7 @@ const Profile = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { user, loading, logout } = useAuth();
-  const { goals } = useGoals();
+  const { allGoals  } = useGoals();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -112,7 +112,7 @@ const Profile = () => {
           onSave={handleProfileUpdate}
         />
 
-        <GoalDashboard goals={goals} />
+        <GoalDashboard goals={allGoals} />
       </div>
       <Footer />
     </div>

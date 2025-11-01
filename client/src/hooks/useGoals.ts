@@ -3,6 +3,7 @@ import { Goal, NewGoal } from '@/types/types';
 
 export function useGoals() {
   const [goals, setGoals] = useState<Goal[]>([]);
+  const [allGoals, setAllGoals] = useState<Goal[]>([]); 
   const [filterYear, setFilterYear] = useState<number | string>(new Date().getFullYear());
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
   const [isAddingGoal, setIsAddingGoal] = useState(false);
@@ -42,17 +43,29 @@ export function useGoals() {
     try {
       const token = localStorage.getItem('access_token');
       if (!token) throw new Error('No access token found');
-      
+
+      const allGoalsResponse = await fetch(`${API_URI}goals/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (allGoalsResponse.ok) {
+        const allData = await allGoalsResponse.json();
+        setAllGoals(allData); 
+      }
+
       let url = `${API_URI}goals/`;
       if (filterYear) url += `?year=${filterYear}`;
-      
+
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
-  
+
       if (!response.ok) throw new Error('Failed to fetch goals');
       const data = await response.json();
       setGoals(data);
@@ -311,6 +324,7 @@ export function useGoals() {
 
   return {
     goals,
+    allGoals,
     filterYear,
     setFilterYear,
     newGoal,
