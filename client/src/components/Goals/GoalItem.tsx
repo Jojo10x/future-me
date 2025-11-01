@@ -57,18 +57,21 @@ const GoalItem: React.FC<GoalItemProps> = ({
   const createdDate = goal.created_at.split("T")[0];
   const updatedDate = goal.updated_at.split("T")[0];
   const completedDate = goal.completed_at ? goal.completed_at.split("T")[0] : "";
+  const currentYear = new Date().getFullYear();
+  const isOverdue = !goal.is_completed && goal.year < currentYear;
 
 
   return (
     <div
       className={`group relative overflow-hidden rounded-3xl transition-all duration-500
-        ${
-          goal.is_completed
-            ? "bg-gradient-to-br from-emerald-500 via-teal-400 to-cyan-500 border-2 border-emerald-200"
+  ${goal.is_completed
+          ? "bg-gradient-to-br from-emerald-500 via-teal-400 to-cyan-500 border-2 border-emerald-200"
+          : isOverdue
+            ? "bg-gradient-to-br from-red-50 to-rose-100 border-2 border-red-300"
             : "bg-white border-2 border-slate-200"
         }
-        hover:shadow-2xl hover:scale-[1.02] transform
-        ${isLoading ? "opacity-70 pointer-events-none" : ""}`}
+  hover:shadow-2xl hover:scale-[1.02] transform
+  ${isLoading ? "opacity-70 pointer-events-none" : ""}`}
     >
       {showCompletionEffect && (
         <div className="absolute inset-0 pointer-events-none">
@@ -86,9 +89,10 @@ const GoalItem: React.FC<GoalItemProps> = ({
               <div className="relative">
                 <h3
                   className={`text-lg lg:text-xl font-semibold tracking-tight transition-all duration-300
-                    ${
-                      goal.is_completed
-                        ? "text-emerald-700 line-through decoration-2 decoration-emerald-400"
+  ${goal.is_completed
+                      ? "text-emerald-700 line-through decoration-2 decoration-emerald-400"
+                      : isOverdue
+                        ? "text-red-700"
                         : "text-slate-900"
                     }`}
                 >
@@ -102,6 +106,11 @@ const GoalItem: React.FC<GoalItemProps> = ({
             </span>
             <span className="flex justify-center text-l">
               {goal.is_completed && `Completed: ${completedDate}`}
+              {isOverdue && !goal.is_completed && (
+                <span className="text-red-600 font-semibold">
+                  ⚠️ Overdue since {goal.year}
+                </span>
+              )}
             </span>
           </div>
 
@@ -119,11 +128,10 @@ const GoalItem: React.FC<GoalItemProps> = ({
 
         <div
           className={`space-y-4 transition-all duration-500
-          ${
-            isExpanded
+          ${isExpanded
               ? "opacity-100 max-h-96"
               : "opacity-0 max-h-0 overflow-hidden"
-          }`}
+            }`}
         >
           {goal.description ? (
             <p
@@ -144,10 +152,11 @@ const GoalItem: React.FC<GoalItemProps> = ({
         <div className="flex items-center justify-end gap-5 pt-4 border-t border-slate-200">
           <span
             className={`mr-auto px-2 lg:px-3 py-1 text-sm font-medium rounded-full
-             transition-all duration-300 animate-fade-in
-              ${
-                goal.is_completed
-                  ? "bg-emerald-100 text-emerald-700"
+   transition-all duration-300 animate-fade-in
+    ${goal.is_completed
+                ? "bg-emerald-100 text-emerald-700"
+                : isOverdue
+                  ? "bg-red-100 text-red-700 ring-2 ring-red-300"
                   : "bg-slate-100 text-slate-600 group-hover:bg-slate-200"
               }`}
           >
