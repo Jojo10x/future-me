@@ -46,7 +46,22 @@ export function useGoals() {
       const token = localStorage.getItem('access_token');
       if (!token) throw new Error('No access token found');
 
-      const response = await fetch(`${API_URI}goals/`, {
+      const allGoalsResponse = await fetch(`${API_URI}goals/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (allGoalsResponse.ok) {
+        const allData = await allGoalsResponse.json();
+        setAllGoals(allData); 
+      }
+
+      let url = `${API_URI}goals/`;
+      if (filterYear) url += `?year=${filterYear}`;
+
+      const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
