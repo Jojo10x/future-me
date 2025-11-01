@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Goal } from "@/types/types";
 import { Target, Medal, TrendingUp } from "lucide-react";
 import {
@@ -17,7 +17,7 @@ import { useMemo } from "react";
 import { YearFilter } from "@/components/Year/YearFilter";
 
 export const GraphsView = ({ goals }: { goals: Goal[] }) => {
-  const [filterYear, setFilterYear] = React.useState<number | string>("");
+  const [filterYear, setFilterYear] = useState<number | string>(new Date().getFullYear());
   
   const filteredGoals = useMemo(() => {
     if (filterYear === "") return goals;

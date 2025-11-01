@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { YearFilter } from "../Year/YearFilter";
 
 export const GoalView = ({ goals }: { goals: Goal[] }) => {
-  const [filterYear, setFilterYear] = useState<number | string>("");
+  const [filterYear, setFilterYear] = useState<number | string>(new Date().getFullYear());
   const [sortField, setSortField] = useState<'created_at' | 'title' | 'subtasks'>('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 

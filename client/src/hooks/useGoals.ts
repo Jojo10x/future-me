@@ -3,7 +3,7 @@ import { Goal, NewGoal } from '@/types/types';
 
 export function useGoals() {
   const [goals, setGoals] = useState<Goal[]>([]);
-  const [filterYear, setFilterYear] = useState<number | string>('');
+  const [filterYear, setFilterYear] = useState<number | string>(new Date().getFullYear());
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
   const [isAddingGoal, setIsAddingGoal] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
