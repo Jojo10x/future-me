@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Goal, NewGoal } from '@/types/types';
 
 export function useGoals() {
+  const [isLoading, setIsLoading] = useState(true);
   const [goals, setGoals] = useState<Goal[]>([]);
   const [allGoals, setAllGoals] = useState<Goal[]>([]); 
   const [filterYear, setFilterYear] = useState<number | string>(new Date().getFullYear());
@@ -21,7 +22,7 @@ export function useGoals() {
 
   useEffect(() => {
     fetchGoals();
-  }, [filterYear]);
+  }, []);
 
   // const fetchGoals = async () => {
   //   try {
@@ -41,25 +42,11 @@ export function useGoals() {
   const API_URI = "https://future-me.onrender.com/api/";
   const fetchGoals = async () => {
     try {
+      setIsLoading(true);
       const token = localStorage.getItem('access_token');
       if (!token) throw new Error('No access token found');
 
-      const allGoalsResponse = await fetch(`${API_URI}goals/`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (allGoalsResponse.ok) {
-        const allData = await allGoalsResponse.json();
-        setAllGoals(allData); 
-      }
-
-      let url = `${API_URI}goals/`;
-      if (filterYear) url += `?year=${filterYear}`;
-
-      const response = await fetch(url, {
+      const response = await fetch(`${API_URI}goals/`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -68,10 +55,13 @@ export function useGoals() {
 
       if (!response.ok) throw new Error('Failed to fetch goals');
       const data = await response.json();
+      setAllGoals(data);
       setGoals(data);
     } catch (error) {
       console.error('Error fetching goals:', error);
-    }
+    } finally {
+    setIsLoading(false);
+  }
   };
 
 
@@ -343,5 +333,6 @@ export function useGoals() {
     snackbarMessage,
     snackbarSeverity,
     handleSnackbarClose,
+    isLoading,
   };
 }

@@ -7,6 +7,8 @@ import GoalList from "@/components/Goals/GoalList";
 import { useGoals } from "@/hooks/useGoals";
 import Footer from "@/components/Footer";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import GoalsLoader from "@/components/Loader";
+
 
 export default function Home() {
   const {
@@ -28,7 +30,12 @@ export default function Home() {
     snackbarMessage,
     snackbarSeverity,
     handleSnackbarClose,
+    isLoading
   } = useGoals();
+
+   if (isLoading) {
+    return <GoalsLoader />;
+  }
 
   return (
     <>
