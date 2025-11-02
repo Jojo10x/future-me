@@ -22,6 +22,42 @@ export type NewGoal = Omit<Goal, 'id' | 'is_completed' | 'subtasks'> & {
   subtasks?: Omit<SubTask, 'id' | 'goalId'>[];
 };
 
+export interface AffectedGoal {
+  id: number;
+  title: string;
+  days?: number;
+  completion?: string;
+  days_active?: number;
+}
+
+export interface AIRecommendation {
+  type: 'velocity' | 'pattern' | 'time_allocation' | 'burnout_risk' | 'complexity' | 'temporal' | 'strategic';
+  title: string;
+  message: string;
+  insight: string;
+  action: string;
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  confidence: number;
+  data_point: string;
+  affected_goals?: AffectedGoal[];
+}
+
+export interface AIMetrics {
+  total_goals: number;
+  active_goals: number;
+  completed_goals: number;
+  completion_rate: number;
+  avg_completion_days: number;
+  goals_with_subtasks: number;
+  current_year_goals: number;
+}
+
+export interface AIRecommendationsResponse {
+  recommendations: AIRecommendation[];
+  metrics: AIMetrics;
+  analysis_timestamp: string;
+}
+
 import { Dispatch, SetStateAction } from "react";
 
 export type BaseGoalFormProps = {
@@ -42,4 +78,3 @@ export type CreatingGoalFormProps = BaseGoalFormProps & {
 };
 
 export type GoalFormProps = EditingGoalFormProps | CreatingGoalFormProps;
-

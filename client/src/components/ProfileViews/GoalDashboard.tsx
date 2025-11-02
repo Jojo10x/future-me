@@ -1,5 +1,5 @@
 import { Goal } from "@/types/types";
-import { ListTodo, BarChart, Calendar, Clock, Flame, Lightbulb } from "lucide-react";
+import { ListTodo, BarChart, Calendar, Clock, Flame, Lightbulb, Brain } from "lucide-react";
 import { useState } from "react";
 import  YearComparison from "./YearComparison ";
 import { GraphsView } from "./GraphsView";
@@ -7,11 +7,11 @@ import { GoalView } from "./GoalView";
 import GoalTimeAnalytics from "./GoalTimeAnalytics";
 import GoalStreaksView from "./GoalStreaksView";
 import GoalInsightsView from "./GoalInsightsView";
+import AIRecommendationsView from "./AIRecommendationsView";
 
 const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
-  const [activeView, setActiveView] = useState<"goals" | "graphs" | "data" | "time" | "streaks" | "insights">(
-  "goals"
-);
+  const [activeView, setActiveView] = useState<"goals" | "graphs" | "data" | "time" | "streaks" | "insights" | "ai">("goals");
+
 
   return (
     <div className="mt-6 bg-white rounded-lg shadow-lg border border-gray-200">
@@ -87,6 +87,17 @@ const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
             <Clock className="h-4 w-4" />
             Time
           </button> 
+          <button
+  onClick={() => setActiveView("ai")}
+  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors
+    ${activeView === "ai"
+      ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white"
+      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+  }`}
+>
+  <Brain className="h-4 w-4" />
+  AI
+</button>
         </div>
 
         {activeView === "goals" && <GoalView goals={goals} />}
@@ -95,6 +106,7 @@ const GoalDashboard: React.FC<{ goals?: Goal[] }> = ({ goals = [] }) => {
         {activeView === "time" && <GoalTimeAnalytics goals={goals} />}
         {activeView === "streaks" && <GoalStreaksView goals={goals} />}
         {activeView === "insights" && <GoalInsightsView goals={goals} />}
+        {activeView === "ai" && <AIRecommendationsView />}
         
       </div>
     </div>

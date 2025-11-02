@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Goal, NewGoal } from '@/types/types';
+import { AIRecommendationsResponse, Goal, NewGoal } from '@/types/types';
 
 export function useGoals() {
   const [isLoading, setIsLoading] = useState(true);
@@ -13,6 +13,8 @@ export function useGoals() {
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
   );
+  const [aiRecommendations, setAiRecommendations] = useState<AIRecommendationsResponse | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
   const [newGoal, setNewGoal] = useState<Partial<NewGoal>>({
     title: '',
     description: '',
@@ -51,6 +53,33 @@ export function useGoals() {
       console.error('Error fetching goals:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchAIRecommendations = async () => {
+    try {
+      setAiLoading(true);
+      const token = localStorage.getItem('access_token');
+      if (!token) throw new Error('No access token found');
+      
+      const response = await fetch(`${API_URI}goals/ai_recommendations/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch AI recommendations');
+
+      const data: AIRecommendationsResponse = await response.json();
+      setAiRecommendations(data);
+    } catch (error) {
+      console.error('Error fetching AI recommendations:', error);
+      setSnackbarMessage("Failed to fetch AI recommendations");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    } finally {
+      setAiLoading(false);
     }
   };
 
@@ -324,5 +353,8 @@ export function useGoals() {
     snackbarSeverity,
     handleSnackbarClose,
     isLoading,
+     aiRecommendations,
+  aiLoading,
+  fetchAIRecommendations,
   };
 }
