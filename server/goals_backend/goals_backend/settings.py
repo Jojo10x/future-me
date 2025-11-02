@@ -52,8 +52,11 @@ MIDDLEWARE = [
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'https://futuremee.vercel.app'
+     "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:30005",
+    "https://futuremee.vercel.app",
+    "https://future-me.onrender.com",
 ]
 CORS_ALLOW_CREDENTIALS = True 
 
@@ -94,9 +97,12 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = False  
 CSRF_USE_SESSIONS = False
-CSRF_COOKIE_NAME = 'csrftoken'
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'https://future-me-jojo10xs-projects.vercel.app/', 'https://futuremee.vercel.app']
-
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://futuremee.vercel.app",
+    "https://future-me.onrender.com"
+]
 # Rest Framework settings (combine the duplicate entries)
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

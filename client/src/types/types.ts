@@ -58,6 +58,47 @@ export interface AIRecommendationsResponse {
   analysis_timestamp: string;
 }
 
+export interface MLPrediction {
+  goal_id: number;
+  completion_probability: number;
+  estimated_days_to_complete: number | null;
+  confidence_level: 'high' | 'medium' | 'low';
+  recommendations: string[];
+  risk_factors: RiskFactor[];
+}
+
+export interface RiskFactor {
+  factor: string;
+  severity: 'high' | 'medium' | 'low';
+  description: string;
+}
+
+export interface MLInsights {
+  predictions: Array<{
+    goal: {
+      id: number;
+      title: string;
+      year: number;
+    };
+  } & MLPrediction>;
+  best_practices?: {
+    subtask_effectiveness?: {
+      with_subtasks_avg_days: number;
+      without_subtasks_avg_days: number;
+      recommendation: string;
+    };
+    best_quarter?: number;
+    quarterly_avg_completion?: Record<string, number>;
+  };
+  summary?: {
+    total_active_goals: number;
+    high_risk_goals: number;
+    on_track_goals: number;
+  };
+  error?: string;
+  message?: string;
+}
+
 import { Dispatch, SetStateAction } from "react";
 
 export type BaseGoalFormProps = {

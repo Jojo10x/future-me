@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AIRecommendationsResponse, Goal, NewGoal } from '@/types/types';
+import { AIRecommendationsResponse, Goal, MLInsights, NewGoal } from '@/types/types';
 
 export function useGoals() {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,6 +15,8 @@ export function useGoals() {
   );
   const [aiRecommendations, setAiRecommendations] = useState<AIRecommendationsResponse | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [mlInsights, setMlInsights] = useState<MLInsights | null>(null);
+  const [mlLoading, setMlLoading] = useState(false);
   const [newGoal, setNewGoal] = useState<Partial<NewGoal>>({
     title: '',
     description: '',
@@ -53,6 +55,64 @@ export function useGoals() {
       console.error('Error fetching goals:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const trainMLModel = async () => {
+    try {
+      setMlLoading(true);
+      const token = localStorage.getItem('access_token');
+      if (!token) throw new Error('No access token found');
+
+      const response = await fetch(`${API_URI}goals/train_ml_model/`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to train ML model');
+
+      const data = await response.json();
+      setSnackbarMessage("ML models trained successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      return data;
+    } catch (error) {
+      console.error('Error training ML model:', error);
+      setSnackbarMessage("Failed to train ML model");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    } finally {
+      setMlLoading(false);
+    }
+  };
+
+  const fetchMLInsights = async () => {
+    try {
+      setMlLoading(true);
+      const token = localStorage.getItem('access_token');
+      if (!token) throw new Error('No access token found');
+
+      const response = await fetch(`${API_URI}goals/ml_insights/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch ML insights');
+
+      const data: MLInsights = await response.json();
+      setMlInsights(data);
+    } catch (error) {
+      console.error('Error fetching ML insights:', error);
+      setSnackbarMessage("Failed to fetch ML insights");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    } finally {
+      setMlLoading(false);
     }
   };
 
@@ -353,8 +413,12 @@ export function useGoals() {
     snackbarSeverity,
     handleSnackbarClose,
     isLoading,
-     aiRecommendations,
-  aiLoading,
-  fetchAIRecommendations,
+    aiRecommendations,
+    aiLoading,
+    fetchAIRecommendations,
+    mlInsights,
+    mlLoading,
+    trainMLModel,
+    fetchMLInsights,
   };
 }
