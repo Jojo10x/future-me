@@ -15,6 +15,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const API_URI = "https://future-me.onrender.com/api/";
 const TIMEOUT_MS = 15000; 
 
+const setCookie = (name: string, value: string, days: number = 7) => {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+};
+
+const deleteCookie = (name: string) => {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+};
+
 const fetchWithTimeout = async (url: string, options: RequestInit) => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -55,6 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('access_token', data.access);
+        setCookie('access_token', data.access, 1); 
         return data.access;
       }
       throw new Error('Failed to refresh token');
@@ -68,25 +78,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const initialToken = localStorage.getItem('access_token');
     
-    if (!initialToken) {
-      setState({ user: null, loading: false });
-      if (window.location.pathname !== '/login') {
-        router.push('/login');
+      if (!initialToken) {
+        setState({ user: null, loading: false });
+        return; 
       }
-      return;
-    }
 
-    const fetchProfile = async (authToken: string) => {
-      return fetchWithTimeout(`${API_URI}profile/`, {
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-    };
+      const fetchProfile = async (authToken: string) => {
+        return fetchWithTimeout(`${API_URI}profile/`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+      };
 
-    let response = await fetchProfile(initialToken);
+      let response = await fetchProfile(initialToken);
 
       if (response.status === 401) {
         const newToken = await refreshToken();
@@ -109,10 +116,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
 
         sessionStorage.setItem('userData', JSON.stringify(userData));
-        
-        if (window.location.pathname === '/login') {
-          router.push('/');
-        }
       } else {
         throw new Error('Profile fetch failed');
       }
@@ -121,10 +124,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
       sessionStorage.removeItem('userData');
+      deleteCookie('access_token');
+      deleteCookie('refresh_token');
       setState({ user: null, loading: false });
-      if (window.location.pathname !== '/login') {
-        router.push('/login');
-      }
     }
   };
 
@@ -160,8 +162,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (response.ok) {
         const data: AuthTokens = await response.json();
+        
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
+        
+        setCookie('access_token', data.access, 1);  
+        setCookie('refresh_token', data.refresh, 7); 
+        
         await checkAuth();
         return true;
       }
@@ -210,6 +217,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     sessionStorage.removeItem('userData');
+    
+    deleteCookie('access_token');
+    deleteCookie('refresh_token');
+    
     setState({ user: null, loading: false });
     router.push('/login');
   };
