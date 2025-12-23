@@ -170,6 +170,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setCookie('refresh_token', data.refresh, 7); 
         
         await checkAuth();
+        router.push('/');
         return true;
       }
       
