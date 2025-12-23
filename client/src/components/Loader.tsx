@@ -1,5 +1,5 @@
 import Image from "next/image";
-import logo from "../../public/logo-called----future-me (1).svg";
+import logo from "../../public/logo-called-future-me.svg";
 
 const Loader = () => {
   return (
