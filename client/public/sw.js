@@ -29,6 +29,10 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   
+  if (!url.protocol.startsWith('http')) {
+    return;
+  }
+  
   if (
     url.pathname.startsWith('/_next/') ||
     url.pathname.startsWith('/api/') ||
